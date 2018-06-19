@@ -15,7 +15,12 @@ async function Login (code, state) {
   return res.data
 }
 
+async function GetInfo () {
+  this.$store.commit('setInfo', (await this.$https.get('/users/info')).data)
+}
+
 export default {
   GetVioletURL: GetVioletURL,
-  Login: Login
+  Login: Login,
+  GetInfo: GetInfo
 }

@@ -1,15 +1,16 @@
+
 const state = {
+  logged: false,
   email: '',
   name: '',
-  valid: '',
-  userClass: '',
-  emailTime: false,
-  autoLogin: false,
-  logged: false,
-  loginTime: '',
+  class: 0,
   info: {},
-  webList: [],
-  devList: []
+  likeNum: 0,
+  maxSize: 0,
+  usedSize: 0,
+  singleSize: 0,
+  contentCount: 0,
+  filesClass: ['常规', '其他']
 }
 
 const getters = {}
@@ -17,41 +18,24 @@ const getters = {}
 const actions = {}
 
 const mutations = {
-  login (state, data) {
-    state.email = data.email
-    state.name = data.name
-    state.valid = data.valid
+  setInfo (state, data) {
     state.logged = true
-    state.loginTime = new Date()
-    state.info.avatar = data.avatar
+    state.name = data.Name
+    state.class = data.Class
+    state.email = data.Email
+    state.info = data.Info
+    state.likeNum = data.Likenum
+    state.maxSize = data.Maxsize
+    state.usedSize = data.UsedSize
+    state.singleSize = data.SingleSize
+    state.contentCount = data.ContentCount
+    state.filesClass = data.FilesClass
   },
   logout (state) {
+    state.logged = false
     state.email = ''
     state.name = ''
-    state.valid = ''
-    state.logged = false
-    state.info.avatar = ''
-  },
-  setEmailTime (state, data) {
-    state.emailTime = data
-  },
-  setAuto (state, data) {
-    state.autoLogin = data
-  },
-  setUserInfo (state, data) {
-    state.name = data.name
-    state.email = data.email
-    state.info = data.info
-    state.userClass = data.userClass
-    state.email = data.email
-    // 刷新头像
-    state.info.avatar = state.info.avatar + '?t=' + new Date().getTime()
-  },
-  setClientList (state, data) {
-    state.webList = data
-  },
-  setDevList (state, data) {
-    state.devList = data
+    state.info = {}
   }
 }
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Button @click="Login">Login</Button>
   </div>
 </template>
 
@@ -12,19 +11,11 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  methods: {
-    async Login() {
-      try {
-        const res = await this.$service.user.GetVioletURL.call(this, window.location.href)
-        console.log(res)
-        window.location.href = res.Data
-      } catch (error) {
-        this.$service.errorHandle.call(this, error, message => {
-          this.$notify.error({
-            title: message
-          })
-        })
-      }
+  async mounted() {
+    try {
+      await this.$service.user.GetInfo.call(this)
+    } catch(error) {
+      this.$store.commit("logout")
     }
   }
 }

@@ -8,9 +8,9 @@ export default {
     if (this.$route.query) {
       let query = this.$route.query
       try {
-        this.$service.user.Login.call(this, query.code, query.state)
+        await this.$service.user.Login.call(this, query.code, query.state)
         if (query.redirectUrl) {
-          window.location.href = query.redirectUrl
+          this.$router.push({ name: query.redirectUrl })
         } else {
           this.$router.push({ name: 'Home' })
         }
