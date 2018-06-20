@@ -7,7 +7,7 @@
       </el-tooltip>
     </div>
     <div>
-      <el-progress type="circle" :percentage="percentage" color="#8e71c7"></el-progress>
+      <el-progress type="circle" :percentage="spacePercentage" color="#8e71c7"></el-progress>
       <p>{{textUsedSize}} / {{textMaxSize}}</p>
     </div>
   </el-card>
@@ -31,7 +31,8 @@
       textMaxSize() {
         return this.fixSizeNum(this.maxSize)
       },
-      percentage() {
+      spacePercentage() {
+        if (this.maxSize === 0) return 0
         return parseFloat((this.usedSize / this.maxSize).toFixed(2))
       }
     },

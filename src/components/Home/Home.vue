@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <el-row class="top-banner" :gutter="20" type="flex">
-      <el-col class="avatar-box" :span="7">
+      <el-col class="avatar-box" :span="6">
         <img class="avatar" :src="avatar">
       </el-col>
       <el-col class="info-box" :span="15">
@@ -19,11 +19,9 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class="home-body" :gutter="40" type="flex" justify="space-around">
-      <el-col class="left-body">
-        <space/>
-      </el-col>
-      <el-col :span="10">
+    <el-row class="home-body" :gutter="40" type="flex" justify="center">
+      <el-col class="content" :span="20">
+        <router-view/>
       </el-col>
     </el-row>
   </div>
@@ -74,7 +72,7 @@
       height: 350px;
       padding-top: 280px;
       .avatar-box {
-        padding-right: 4%;
+        min-width: 200px;
         text-align: right;
         .avatar {
           box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
@@ -118,10 +116,10 @@
     .home-body {
       box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
       background-color: rgba(248, 246, 241, 0.95);
-      padding-top: 150px;
+      padding-top: 120px;
       height: 1000px;
-      .left-body {
-        max-width: 350px;
+      .content{
+        max-width: 1100px;
       }
     }
   }

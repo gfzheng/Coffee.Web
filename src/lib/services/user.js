@@ -26,6 +26,9 @@ async function GetInfo () {
 
 async function Logout () {
   this.$store.commit('logout')
+  window.localStorage.clear()
+  this.$router.push({ name: 'NotLogin' })
+  await this.$https.post('/users/logout')
 }
 
 export default {

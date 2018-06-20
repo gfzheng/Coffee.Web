@@ -6,10 +6,29 @@
 </template>
 
 <script>
+  import {
+    mapState
+  } from 'vuex'
   import Nav from './components/Nav'
   export default {
     components: {
       Nav
+    },
+    computed: {
+      ...mapState({
+        logged: state => state.user.logged
+      })
+    },
+    async mounted() {
+      console.log(this.logged,this.$route.name)
+      console.log(this.$route.name !== 'Login')
+      if (this.$route.name !== 'Login') {
+        try{
+          await this.$service.user.GetInfo.call(this)
+        } catch(err) {
+          this.$service.user.Logout.call(this)
+        }
+      }
     },
     name: 'App'
   }
