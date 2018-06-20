@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <Nav></Nav>
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
@@ -23,5 +22,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    min-width: 500px;
   }
 </style>

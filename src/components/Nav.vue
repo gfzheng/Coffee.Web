@@ -9,15 +9,23 @@
         <i class="fa fa-home fa-fw" aria-hidden="true"></i>
         主页
       </el-menu-item>
+      <el-menu-item index="4">
+        <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
+        广场
+      </el-menu-item>
       <el-menu-item class="menu-login" index="2" v-if="!logged">
         <i class="fa fa-user fa-fw" aria-hidden="true"></i>
         登录
       </el-menu-item>
       <el-submenu class="menu-user" index="3" v-if="logged">
         <template slot="title">
-          <img class="user-avatar" :src="avatar"> {{name}}
+          <img class="user-avatar" :src="avatar">
+          <el-badge :is-dot="notif">{{name}}</el-badge>
         </template>
-        <el-menu-item index="3-1">个人中心</el-menu-item>
+        <el-menu-item index="3-1">
+          <el-badge :value="notifCount">消息</el-badge>
+        </el-menu-item>
+        <el-menu-item index="3-1">设置</el-menu-item>
         <el-menu-item index="3-2">退出登陆</el-menu-item>
       </el-submenu>
     </el-menu>
@@ -32,14 +40,13 @@
         logged: state => state.user.logged,
         name: state => state.user.name,
         avatar: state => state.user.info.Avatar
-      }),
-      language() {
-        return this.$store.getters.language.Auth
-      }
+      })
     },
     data() {
       return {
-        activeIndex: '1'
+        activeIndex: '1',
+        notif: true,
+        notifCount: 5
       };
     },
     methods: {
@@ -74,6 +81,10 @@
 <style lang="scss">
   $fontColor: #bfcbd9;
   .nav-menu {
+    position: fixed;
+    z-index: 999;
+    right: 0;
+    left: 0;
     .head-box{
       user-select: none;
       cursor: pointer;
@@ -100,6 +111,9 @@
         height: 35px;
         width: 35px;
         margin-right: 10px;
+      }
+      .is-dot {
+        top: 30%;
       }
     }
   }

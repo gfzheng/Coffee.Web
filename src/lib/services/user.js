@@ -16,11 +16,21 @@ async function Login (code, state) {
 }
 
 async function GetInfo () {
-  this.$store.commit('setInfo', (await this.$https.get('/users/info')).data)
+  let res = (await this.$https.get('/users/info')).data
+  if (res.State === 'error') {
+    Logout.call(this)
+  } else {
+    this.$store.commit('setInfo', res)
+  }
+}
+
+async function Logout () {
+  this.$store.commit('logout')
 }
 
 export default {
   GetVioletURL: GetVioletURL,
   Login: Login,
-  GetInfo: GetInfo
+  GetInfo: GetInfo,
+  Logout: Logout
 }

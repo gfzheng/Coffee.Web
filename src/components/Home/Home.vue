@@ -1,0 +1,128 @@
+<template>
+  <div class="home">
+    <el-row class="top-banner" :gutter="20" type="flex">
+      <el-col class="avatar-box" :span="7">
+        <img class="avatar" :src="avatar">
+      </el-col>
+      <el-col class="info-box" :span="15">
+        <p class="info-bio">
+          {{bio}}
+        </p>
+        <div class="info-name">
+          {{name}}
+          <i v-if="gender === 2" class="fa fa-transgender i-other" aria-hidden="true"></i>
+          <i v-if="gender === 1" class="fa fa-venus i-pink" aria-hidden="true"></i>
+          <i v-if="gender === 0" class="fa fa-mars i-blue" aria-hidden="true"></i>
+        </div>
+        <div class="info-email">
+          {{email}}
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="home-body" :gutter="40" type="flex" justify="space-around">
+      <el-col class="left-body">
+        <space/>
+      </el-col>
+      <el-col :span="10">
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+  import {
+    mapState
+  } from 'vuex'
+  import space from './Space'
+  export default {
+    name: 'Home',
+    components: {
+      space,
+    },
+    computed: {
+      ...mapState({
+        name: state => state.user.name,
+        bio: state => state.user.info.Bio,
+        email: state => state.user.email,
+        avatar: state => state.user.info.Avatar,
+        gender: state => state.user.info.Gender,
+      })
+    },
+    data() {
+      return {
+      }
+    },
+    methods: {
+    },
+    async mounted() {
+      try {
+        await this.$service.user.GetInfo.call(this)
+      } catch (error) {
+        this.$store.commit("logout")
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  .home {
+    background-image: url('../../assets/wallhaven.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    .top-banner {
+      text-align: left;
+      height: 350px;
+      padding-top: 280px;
+      .avatar-box {
+        padding-right: 4%;
+        text-align: right;
+        .avatar {
+          box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
+          border-radius: 50%;
+          height: 140px;
+          width: 140px;
+          border: 5px solid white;
+        }
+      }
+      .info-box {
+        .info-name {
+          padding-top: 5px;
+          font-size: 22px;
+          font-weight: bold;
+          .i-pink {
+            color: #e87a90;
+          }
+          .i-blue {
+            color: #2ea9df;
+          }
+          .i-other {
+            color: #1b813e;
+          }
+        }
+        .info-email {
+          color: gray;
+          margin-top: 6px;
+          font-size: 15px;
+        }
+        .info-bio {
+          height: 20px;
+          color: white;
+          margin-top: 40px;
+          font-size: 18px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+      z-index: 10;
+    }
+    .home-body {
+      box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
+      background-color: rgba(248, 246, 241, 0.95);
+      padding-top: 150px;
+      height: 1000px;
+      .left-body {
+        max-width: 350px;
+      }
+    }
+  }
+</style>
