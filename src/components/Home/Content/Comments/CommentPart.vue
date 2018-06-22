@@ -1,7 +1,7 @@
 <template>
     <el-row class="users-comment">
       <div>
-        <img class="user-avatar" src="../../../assets/avatar.png">
+        <img class="user-avatar" :src="commentData.avatar">
         <div class="comment-name">
           <div class="name">{{commentData.userName}}</div>
           <div class="time">{{formatTime(commentData.time)}}</div>

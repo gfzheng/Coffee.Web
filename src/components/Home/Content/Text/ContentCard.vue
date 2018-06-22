@@ -32,7 +32,7 @@
 
 <script>
   import EditCard from './EditCard'
-  import Comments from './Comments'
+  import Comments from '../Comments/Comments'
   export default {
     props: {
       contentData: {

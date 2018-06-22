@@ -115,7 +115,7 @@
     }
     .home-body {
       box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
-      background-color: rgba(248, 246, 241, 0.95);
+      background-color: rgba(254, 254, 254, 0.95);
       padding-top: 120px;
       min-height: 800px;
       .content{

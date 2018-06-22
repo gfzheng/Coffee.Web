@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import tabText from './Content/Text'
+import tabText from './Content/Text/Text'
   export default {
     name: "Tab",
     components: {

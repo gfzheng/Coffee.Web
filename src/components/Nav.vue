@@ -157,7 +157,7 @@
             this.$router.push({name: "NotLogin"})
           }
         } else if (key == 'Message') {
-          this.$router.push({name: "Message"})
+          this.$router.push({name: "CommentBox"})
         } else if (key == 'Setting') {
           this.$router.push({name: "Setting"})
         }

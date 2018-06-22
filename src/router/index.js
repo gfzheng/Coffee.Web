@@ -8,6 +8,11 @@ import Login from '../pages/Login.vue'
 import NotLogin from '../pages/NotLogin.vue'
 import Square from '../components/Square/Square.vue'
 
+import CommentBox from '../components/Home/Content/Message/CommentBox.vue'
+import LikeBox from '../components/Home/Content/Message/LikeBox.vue'
+import MessageBox from '../components/Home/Content/Message/MessageBox.vue'
+import SystemBox from '../components/Home/Content/Message/SystemBox.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -25,7 +30,24 @@ export default new Router({
       {
         path: '/message',
         name: 'Message',
-        component: Message
+        component: Message,
+        children: [{
+          path: '/message/comment',
+          name: 'CommentBox',
+          component: CommentBox
+        }, {
+          path: '/message/like',
+          name: 'LikeBox',
+          component: LikeBox
+        }, {
+          path: '/message/messagebox',
+          name: 'MessageBox',
+          component: MessageBox
+        }, {
+          path: '/message/system',
+          name: 'SystemBox',
+          component: SystemBox
+        }]
       },
       {
         path: '/setting',
