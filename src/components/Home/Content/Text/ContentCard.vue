@@ -8,7 +8,7 @@
         </p>
         <el-card class="text-box" shadow="hover">
           <i v-if="!contentData.isPublic" class="fa fa-lock lock-i" aria-hidden="true"></i>
-          <p class="title">{{contentData.title}}</p>
+          <p class="title" @click="gotoDetail">{{contentData.title}}</p>
           <p class="text-body">{{contentData.content}}</p>
           <div class="tag-box">
             <el-tag size="small" class="tag" v-for="(tag, index) in contentData.tags" :key="index">{{tag}}</el-tag>
@@ -69,6 +69,9 @@
       doneEdit() {
         this.showEdit = false
       },
+      gotoDetail() {
+        this.$router.push({name: 'Detail'})
+      }
     }
   }
 </script>
@@ -105,8 +108,15 @@
         text-align: right;
       }
       .title {
+        user-select: none;
+        cursor: pointer;
         margin-top: 5px;
         font-size: 23px;
+        transition: all .5s;
+        &:hover{
+          color:rgb(73, 73, 73);
+          transform: translateY(-3px);
+        }
       }
       .text-body {
         color:rgb(59, 59, 59);

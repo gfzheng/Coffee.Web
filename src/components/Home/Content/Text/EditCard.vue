@@ -11,7 +11,7 @@
       </div>
       <el-input class="input-title" type="textarea" autosize placeholder="标题" v-model="title">
       </el-input>
-      <el-input class="input-text" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" placeholder="内容" v-model="content">
+      <el-input class="input-text" type="textarea" :autosize="{ minRows: 4, maxRows: 20}" placeholder="内容" v-model="content">
       </el-input>
       <div class="card-tag">
         <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">{{tag}}</el-tag>

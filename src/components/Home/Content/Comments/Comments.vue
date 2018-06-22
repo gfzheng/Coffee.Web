@@ -40,6 +40,7 @@ export default {
 
 <style lang="scss">
   .comments {
+    text-align: left;
     margin-top: 10px;
     padding: 10px;
     border-top: 1px solid rgba(0, 0, 0, .1);
