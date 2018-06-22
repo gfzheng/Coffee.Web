@@ -62,7 +62,7 @@ export default new Router({
       component: Detail
     },
     {
-      path: 'square',
+      path: '/square',
       name: 'Square',
       component: Square
     },
