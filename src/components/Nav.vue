@@ -107,7 +107,7 @@
       if (this.$route.path.toLowerCase() === '/square') {
         this.activeIndex = 'Square'
       } else if (this.$route.path.toLowerCase() === '') {
-        this.activeIndex = 'Home'
+        this.activeIndex = 'NotLogin'
       } else if (this.$route.path.toLowerCase() === '/message') {
         this.activeIndex = 'Message'
       } else if (this.$route.path.toLowerCase() === '/setting') {
@@ -130,7 +130,6 @@
       async login() {
         try {
           const res = await this.$service.user.GetVioletURL.call(this, this.$route.name)
-          console.log(res)
           window.location.href = res.Data
         } catch (error) {
           this.$service.errorHandle.call(this, error, message => {
@@ -152,7 +151,11 @@
         } else if (key == 'Square') {
           this.$router.push({name: "Square"})
         } else if (key == 'Home') {
-          this.$router.push({name: "Tab"})
+          if (this.logged) {
+            this.$router.push({name: "Tab"})
+          } else {
+            this.$router.push({name: "NotLogin"})
+          }
         } else if (key == 'Message') {
           this.$router.push({name: "Message"})
         } else if (key == 'Setting') {
@@ -166,6 +169,7 @@
 <style lang="scss">
   $fontColor: #bfcbd9;
   .nav-menu {
+    min-width: 500px;
     position: fixed;
     z-index: 999;
     right: 0;

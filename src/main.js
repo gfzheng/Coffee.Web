@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import ax from './lib/axios'
+import util from './lib/util'
 import service from './lib/service'
 import ElementUI from 'element-ui'
 
@@ -14,6 +15,7 @@ Vue.use(require('vue-cookies'))
 Vue.use(ElementUI)
 Vue.use(service)
 Vue.prototype.$https = ax
+Vue.prototype.$util = util
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

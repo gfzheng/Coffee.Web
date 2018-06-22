@@ -56,7 +56,7 @@
       try {
         await this.$service.user.GetInfo.call(this)
       } catch (error) {
-        this.$store.commit("logout")
+        this.$service.user.Logout.call(this)
       }
     }
   }
@@ -117,7 +117,7 @@
       box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
       background-color: rgba(248, 246, 241, 0.95);
       padding-top: 120px;
-      height: 1000px;
+      min-height: 800px;
       .content{
         max-width: 1100px;
       }

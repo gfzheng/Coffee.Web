@@ -3,7 +3,8 @@
     <div class="center">
       <img src="../assets/coffee.png"/>
       <p>Coffee</p>
-      <p class="help">请登陆</p>
+      <p class="sub-title">个人数据管理中心</p>
+      <p class="help">登陆后查看更多内容</p>
     </div>
   </div>
 </template>
@@ -18,17 +19,22 @@
       margin: 20% auto;
       user-select: none;
       img {
-        margin-left: 18px;
-        height: 100px;
-        width: 100px;
+        margin-left: 22px;
+        height: 110px;
+        width: 110px;
       }
       p {
-        color:#D2B589;
-        font-size: 24px;
+        color:rgb(192, 162, 117);
+        font-size: 26px;
         user-select: none;
       }
+      .sub-title{
+        color:rgb(160, 135, 98);
+        font-size: 20px;
+      }
       .help{
-        font-size: 15px;
+        color:rgb(160, 135, 98);
+        font-size: 14px;
       }
     }
   }
