@@ -27,83 +27,120 @@
 </template>
 
 <script>
-  export default {
-    name: 'EditCard',
-    computed: {
-      publicText() {
-        return this.isPublic ? '公开' : '私密';
-      },
-      buttonText() {
-        return this.isEdit ? '修改' : '发布'
-      }
+export default {
+  name: 'EditCard',
+  computed: {
+    publicText () {
+      return this.isPublic ? '公开' : '私密';
     },
-    props: {
-      rawData: {
-        require: false
-      }
-    },
-    data() {
-      return {
-        isEdit: false,
-        nowTime: '',
-        title: '',
-        content: '',
-        isPublic: true,
-        dynamicTags: [],
-        inputVisible: false,
-        inputValue: '',
-      }
-    },
-    methods: {
-
-      submitText() {
-        this.$emit('submit');
-      },
-
-      handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      },
-
-      showInput() {
-        this.inputVisible = true;
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
-      },
-
-      handleInputConfirm() {
-        let inputValue = this.inputValue;
-        if (inputValue) {
-          this.dynamicTags.push(inputValue);
+    buttonText () {
+      return this.isEdit ? '修改' : '发布'
+    }
+  },
+  props: {
+    rawData: {
+      require: false
+    }
+  },
+  data () {
+    return {
+      isEdit: false,
+      nowTime: '',
+      title: '',
+      content: '',
+      isPublic: true,
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: '',
+    }
+  },
+  methods: {
+    // 发布 / 修改
+    async submitText () {
+      try {
+        if (!this.isEdit) { // 发布模式
+          let res = await this.$service.content.AddText.call(this, {
+            title: this.title,
+            text: this.content,
+            isPublic: this.isPublic,
+            tags: this.dynamicTags
+          })
+        console.log(res)
+        } else {
+          let res = await this.$service.content.UpdateText.call(this, {
+            id: this.rawData.ID,
+            title: this.title,
+            content: this.content,
+            public: this.isPublic,
+            tags: this.dynamicTags
+          })
+        console.log(res)
         }
-        this.inputVisible = false;
-        this.inputValue = '';
-      },
-
-      deleteText() {
-
+      } catch (error) {
+        this.$service.errorHandle.call(this, error, msg => {
+          this.$notify.error({
+            title: msg
+          })
+        })
       }
+      this.$emit('submit');
     },
-    mounted() {
-      if (this.rawData) {
-        this.title = this.rawData.title
-        this.content = this.rawData.content
-        this.dynamicTags = this.rawData.tags
-        this.isPublic = this.rawData.isPublic
-        this.isEdit = true
-      } else {
-        this.title = this.$util.formatDate(new Date(), 'M月dd日')
-        this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
-        setInterval(_ => {
-          this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
-        }, 30000)
+
+    handleClose (tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput () {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm () {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
       }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
+
+    async deleteText () {
+      try {
+        let res = await this.$service.content.DeleteText.call(this, this.rawData.ID)
+        console.log(res)
+      } catch (error) {
+        this.$service.errorHandle.call(this, error, msg => {
+          this.$notify.error({
+            title: msg
+          })
+        })
+      }
+      this.$emit('submit');
+    }
+
+  },
+  mounted () {
+    if (this.rawData) {
+      this.title = this.rawData.Name
+      this.content = this.rawData.Detail
+      this.dynamicTags = this.rawData.Tag
+      this.isPublic = this.rawData.Public
+      this.isEdit = true
+    } else {
+      this.title = this.$util.formatDate(new Date(), 'M月dd日')
+      this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
+      setInterval(_ => {
+        this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
+      }, 30000)
     }
   }
+}
 </script>
 
 <style lang="scss">
-.edit-card{
+.edit-card {
   .new-text-card {
     margin-left: 28px;
     margin-bottom: 40px;
@@ -130,7 +167,8 @@
       margin: 15px 0;
     }
     .el-textarea__inner {
-      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     }
     .el-tag {
       margin-left: 10px;

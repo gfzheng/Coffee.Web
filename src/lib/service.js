@@ -1,9 +1,11 @@
 const userService = require('./services/user')
+const contentService = require('./services/content')
 
 const service = {
   install: function (Vue, options) {
     Vue.prototype.$service = {
       user: userService.default,
+      content: contentService.default,
       errorHandle: this.errorHandle
     }
   },

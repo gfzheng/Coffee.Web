@@ -47,7 +47,7 @@ module.exports = {
     cacheBusting: true,
 
     cssSourceMap: true,
-    axiosBase: "http://localhost:8080/api/"
+    axiosBase: "/api/"
 
   },
 
