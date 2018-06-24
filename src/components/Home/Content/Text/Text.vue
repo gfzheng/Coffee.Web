@@ -14,7 +14,7 @@
     <transition name="el-zoom-in-top">
       <edit-card @submit="getTextContent" v-if="newVisible"></edit-card>
     </transition>
-    <content-card @FlushTextList="getTextContent" v-for="(content, index) in showText" :contentData="content" :key="index"></content-card>
+    <text-card @FlushTextList="getTextContent" v-for="(content, index) in showText" :contentData="content" :key="index"></text-card>
     <el-pagination class="pagination" v-show="contents.length > pageSize" :current-page="currentPage" background
       layout="prev, pager, next" :page-size="pageSize" :total="contents.length" @current-change="changePage" />
       <p class="bottom-under line-time">
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ContentCard from './ContentCard'
+import TextCard from './TextCard'
 import EditCard from './EditCard'
 export default {
   name: 'ContentText',
@@ -36,7 +36,7 @@ export default {
     }
   },
   components: {
-    ContentCard, EditCard
+    TextCard, EditCard
   },
   data () {
     return {

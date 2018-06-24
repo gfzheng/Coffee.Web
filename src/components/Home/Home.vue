@@ -31,12 +31,8 @@
   import {
     mapState
   } from 'vuex'
-  import space from './Space'
   export default {
     name: 'Home',
-    components: {
-      space,
-    },
     computed: {
       ...mapState({
         name: state => state.user.name,
@@ -45,12 +41,6 @@
         avatar: state => state.user.info.Avatar,
         gender: state => state.user.info.Gender,
       })
-    },
-    data() {
-      return {
-      }
-    },
-    methods: {
     },
     async mounted() {
       try {

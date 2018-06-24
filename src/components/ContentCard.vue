@@ -1,60 +1,55 @@
 <template>
   <div class="content-card">
-    <transition name="el-zoom-in-center" @after-leave="showEdit = true">
-      <div v-if="showCard">
-        <p class="line-time">
-          <i class="fa fa-circle time-point" aria-hidden="true"></i>
-          <span class="time-text">{{formatTime(contentData.PublishDate)}}</span>
-        </p>
-        <el-card class="text-box" shadow="hover">
-          <span v-if="!contentData.Public" class="lock-text">
-            <i v-if="!contentData.Public" class="fa fa-lock fa-fw" aria-hidden="true"></i>
-            仅自己可见
-          </span>
-          <p class="title" @click="gotoDetail">{{contentData.Name}}</p>
-          <p class="text-body" v-html="bodyText"></p>
-          <p class="see-all" v-if="moreText&&!seeAll" @click="seeAll = true">查看全部</p>
-          <p class="see-all" v-if="seeAll" @click="seeAll = false">收起全文</p>
-          <div class="tag-box">
-            <el-tag size="small" class="tag" v-for="(tag, index) in contentData.Tag" :key="index">{{tag}}</el-tag>
-          </div>
-          <el-row class="control-box">
-            <el-button :disabled="buttonLike" size="small" type="success" :plain="!likeData.includes(contentData.ID)" @click="likeIt">
-              <i class="fa fa-thumbs-up fa-fw" aria-hidden="true"></i> | {{contentData.LikeNum}}</el-button>
-            <el-button size="small" type="warning" @click="toComment">
-              <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> | {{contentData.CommentNum}}</el-button>
-            <el-button v-if="showEditButton" size="small" type="primary" icon="el-icon-edit" @click="showCard = false"></el-button>
-          </el-row>
-          <el-collapse-transition>
-            <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount" :pageSize="5"></comments>
-          </el-collapse-transition>
-        </el-card>
+    <p v-if="showTimeLine" class="line-time">
+      <i class="fa fa-circle time-point" aria-hidden="true"></i>
+      <span class="time-text">{{formatTime(contentData.PublishDate)}}</span>
+    </p>
+    <el-card class="text-box" shadow="hover">
+      <span v-if="!contentData.Public" class="lock-text">
+        <i v-if="!contentData.Public" class="fa fa-lock fa-fw" aria-hidden="true"></i>
+        仅自己可见
+      </span>
+      <p class="title" @click="gotoDetail">{{contentData.Name}}</p>
+      <p class="text-body" v-html="bodyText"></p>
+      <p class="see-all" v-if="moreText&&!seeAll" @click="seeAll = true">查看全部</p>
+      <p class="see-all" v-if="seeAll" @click="seeAll = false">收起全文</p>
+      <div class="tag-box">
+        <el-tag size="small" class="tag" v-for="(tag, index) in contentData.Tag" :key="index">{{tag}}</el-tag>
       </div>
-    </transition>
-    <transition name="el-zoom-in-center" @after-leave="showCard = true">
-      <edit-card v-show="showEdit" @submit="doneEdit" @closeIt="showEdit = false" :rawData="contentData"></edit-card>
-    </transition>
+      <el-row class="control-box">
+        <el-button :disabled="buttonLike" size="small" type="success" :plain="!likeData.includes(contentData.ID)" @click="likeIt">
+          <i class="fa fa-thumbs-up fa-fw" aria-hidden="true"></i> | {{contentData.LikeNum}}</el-button>
+        <el-button size="small" type="warning" @click="toComment">
+          <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> | {{contentData.CommentNum}}</el-button>
+        <el-button v-if="showEditButton" size="small" type="primary" icon="el-icon-edit" @click="$emit('showEdit')"></el-button>
+      </el-row>
+      <el-collapse-transition>
+        <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount" :pageSize="5"></comments>
+      </el-collapse-transition>
+    </el-card>
   </div>
 </template>
 
 <script>
-import EditCard from './EditCard'
-import Comments from '../Comments/Comments'
+import Comments from './Comments/Comments'
 import { mapState } from 'vuex'
 export default {
   props: {
     contentData: {
       require: true
+    },
+    closeTimeLine: {
+      type: Boolean,
+      require: false
     }
   },
   components: {
-    EditCard, Comments
+    Comments
   },
   data () {
     return {
+      showTimeLine: true,
       showEditButton: true,
-      showCard: true,
-      showEdit: false,
       showComment: false,
       moreText: false,
       seeAll: false,
@@ -77,6 +72,9 @@ export default {
     }
   },
   mounted () {
+    if (this.closeTimeLine === true) {
+      this.showTimeLine = false
+    }
     this.checkText()
   },
   methods: {
@@ -107,7 +105,7 @@ export default {
             throw res.State
           }
         }
-      } catch(error) {
+      } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
       this.buttonLike = false
@@ -144,7 +142,7 @@ export default {
     },
 
     gotoDetail () {
-      this.$router.push({ name: 'Detail', params: {id: this.contentData.ID }})
+      this.$router.push({ name: 'Detail', params: { id: this.contentData.ID } })
     },
 
   }
@@ -174,6 +172,7 @@ export default {
 }
 
 .content-card {
+  text-align: left;
   .text-box {
     margin-left: 30px;
 

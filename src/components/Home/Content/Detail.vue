@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import comments from './Comments/Comments'
+import comments from '@/components/Comments/Comments'
 import {mapState} from 'vuex'
 export default {
   components: {
@@ -49,8 +49,8 @@ export default {
     return {
       loaded: false,
       own: {
-        Name: '',
-        Avatar: ''
+        Name: '匿名用户',
+        Avatar: 'https://pic3.zhimg.com/50/v2-e2361d82ce7465808260f87bed4a32d0_im.jpg'
       },
       windowsScroll: 0,
       detail: {

@@ -34,10 +34,21 @@ async function Get (id) {
   return res.data
 }
 
+async function GetPublic () {
+  let res = await this.$https.get('/content/public', {
+    params: {
+      page: 1,
+      eachPage: 10
+    }
+  })
+  return res.data
+}
+
 export default {
   AddText: AddText,
   GetText: GetTexts,
   DeleteText: DeleteText,
   UpdateText: UpdateText,
-  Get: Get
+  Get: Get,
+  GetPublic: GetPublic
 }
