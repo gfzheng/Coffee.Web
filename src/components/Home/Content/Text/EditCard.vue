@@ -19,8 +19,9 @@
         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加标签</el-button>
       </div>
       <div class="submit-button">
-        <el-button type="danger" @click="deleteText" v-if="isEdit">删除</el-button>
-        <el-button type="success" @click="submitText">{{buttonText}}</el-button>
+        <el-button class="button-back" size="small" type="primary" @click="$emit('closeIt')" v-if="isEdit">返回</el-button>
+        <el-button size="small" type="danger" @click="deleteText" v-if="isEdit">删除</el-button>
+        <el-button size="small" type="success" @click="submitText">{{buttonText}}</el-button>
       </div>
     </el-card>
   </div>
@@ -57,24 +58,37 @@ export default {
   methods: {
     // 发布 / 修改
     async submitText () {
+      if (this.title === '') {
+        this.$message.error('标题不能为空哦');
+        return
+      } else if (this.content === '') {
+        this.$message.error('内容也不能为空哦');
+        return
+      }
       try {
         if (!this.isEdit) { // 发布模式
           let res = await this.$service.content.AddText.call(this, {
             title: this.title,
-            text: this.content,
+            content: this.content,
             isPublic: this.isPublic,
             tags: this.dynamicTags
           })
-        console.log(res)
+          if (res.State != 'success') {
+            console.log(res)
+            this.$message.error("非法请求")
+          }
         } else {
           let res = await this.$service.content.UpdateText.call(this, {
             id: this.rawData.ID,
             title: this.title,
             content: this.content,
-            public: this.isPublic,
+            isPublic: this.isPublic,
             tags: this.dynamicTags
           })
-        console.log(res)
+          if (res.State != 'success') {
+            console.log(res)
+            this.$message.error("非法请求")
+          }
         }
       } catch (error) {
         this.$service.errorHandle.call(this, error, msg => {
@@ -107,17 +121,23 @@ export default {
     },
 
     async deleteText () {
-      try {
-        let res = await this.$service.content.DeleteText.call(this, this.rawData.ID)
-        console.log(res)
-      } catch (error) {
-        this.$service.errorHandle.call(this, error, msg => {
-          this.$notify.error({
-            title: msg
+      this.$confirm('你即将永久删除该内容, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          let res = await this.$service.content.DeleteText.call(this, this.rawData.ID)
+          console.log(res)
+        } catch (error) {
+          this.$service.errorHandle.call(this, error, msg => {
+            this.$notify.error({
+              title: msg
+            })
           })
-        })
-      }
-      this.$emit('submit');
+        }
+        this.$emit('submit');
+      })
     }
 
   },
@@ -187,6 +207,9 @@ export default {
     }
     .submit-button {
       text-align: right;
+      .button-back {
+        float: left;
+      }
     }
   }
 }

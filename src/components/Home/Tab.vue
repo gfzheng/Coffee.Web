@@ -1,5 +1,6 @@
 <template>
   <div class="tab">
+    <el-button :class="[windowsScroll > 300 ? 'button-top': 'button-top-none']" type="success" icon="el-icon-arrow-up" circle @click="toTop"></el-button>
     <el-button class="button-add" type="primary" icon="el-icon-plus" circle></el-button>
     <el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane name="text">
@@ -59,12 +60,22 @@ import tabText from './Content/Text/Text'
     computed: {},
     data() {
       return {
-        activeName: 'text'
+        activeName: 'text',
+        windowsScroll: 0
       };
     },
     methods: {
+      toTop() {
+        window.scroll({"behavior": "smooth", "top": 0})
+      },
+
       handleClick(tab, event) {
         console.log(tab, event);
+      }
+    },
+    mounted() {
+      window.onscroll = _ => {
+        this.windowsScroll = window.scrollY
       }
     }
   };
@@ -79,9 +90,19 @@ import tabText from './Content/Text/Text'
       right: 50px;
       bottom: 50px;
     }
+    .button-top {
+      position: fixed;
+      bottom: 40px;
+      left: 40px;
+    }
+    .button-top-none {
+      display: none;
+    }
     .tab-card {
       margin-left: 50px;
       margin-bottom: 40px;
     }
   }
+
+
 </style>

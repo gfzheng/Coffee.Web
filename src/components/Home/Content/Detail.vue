@@ -2,7 +2,7 @@
   <div class="detail">
     <el-row class="top-banner" :gutter="20" type="flex" justify="center">
       <el-col class="info-box" :span="18">
-        <el-button class="button-back" type="primary" icon="el-icon-back" circle title="返回" @click="backPage"></el-button>
+        <el-button :class="[windowsScroll < 260 ? 'button-back': 'button-float']" type="primary" icon="el-icon-back" circle title="返回" @click="backPage"></el-button>
         <p class="info-title">
           {{detail.title}}
         </p>
@@ -18,6 +18,7 @@
     <el-row class="home-body" :gutter="40" type="flex" justify="center">
       <el-col class="content" :span="18">
         <div class="info-content">
+          {{windowsScroll}}
           {{detail.content}}
         </div>
          <comments :comments="detail.comments"></comments>
@@ -39,6 +40,7 @@ import comments from './Comments/Comments'
           name: 'ZhenlyChen',
           avatar: 'https://violet-1252808268.cosgz.myqcloud.com/5a423d7b1957c732d450a4ac.jpg',
         },
+        windowsScroll: 0,
         detail: {
           id: '123542334',
           title: '我是一个标题',
@@ -95,6 +97,9 @@ import comments from './Comments/Comments'
     mounted()
     {
       window.scrollTo(0,0)
+      window.onscroll = _ => {
+        this.windowsScroll = window.scrollY
+      }
     }
   }
 </script>
@@ -111,10 +116,14 @@ import comments from './Comments/Comments'
       padding-top: 270px;
       .info-box {
         .button-back{
-          float: left;
           position: absolute;
           left: 30px;
           bottom: -18px;
+        }
+        .button-float{
+          position: fixed;
+          left: 20px;
+          top: 70px;
         }
         .info-title {
           color: white;

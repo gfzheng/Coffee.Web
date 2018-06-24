@@ -1,11 +1,17 @@
 const userService = require('./services/user')
 const contentService = require('./services/content')
+const commentService = require('./services/comment')
+const likeService = require('./services/like')
+const notificationService = require('./services/notification')
 
 const service = {
   install: function (Vue, options) {
     Vue.prototype.$service = {
       user: userService.default,
       content: contentService.default,
+      comment: commentService.default,
+      like: likeService.default,
+      notification: notificationService.default,
       errorHandle: this.errorHandle
     }
   },

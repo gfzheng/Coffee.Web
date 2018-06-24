@@ -10,7 +10,8 @@ const state = {
   usedSize: 0,
   singleSize: 0,
   contentCount: 0,
-  filesClass: ['常规', '其他']
+  filesClass: ['常规', '其他'],
+  like: []
 }
 
 const getters = {}
@@ -24,12 +25,15 @@ const mutations = {
     state.class = data.Class
     state.email = data.Email
     state.info = data.Info
-    state.likeNum = data.Likenum
+    state.likeNum = data.LikeNum
     state.maxSize = data.MaxSize
     state.usedSize = data.UsedSize
     state.singleSize = data.SingleSize
     state.contentCount = data.ContentCount
     state.filesClass = data.FilesClass
+  },
+  setLike (state, data) {
+    state.like = data
   },
   logout (state) {
     state.logged = false

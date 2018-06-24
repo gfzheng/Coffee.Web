@@ -1,7 +1,7 @@
 async function AddText (data) {
   let res = await this.$https.post('/content/text', {
     title: data.title,
-    text: data.text,
+    content: data.content,
     tags: data.tags,
     isPublic: data.isPublic
   })
@@ -24,10 +24,9 @@ async function UpdateText(data) {
     title: data.title,
     content: data.content,
     tags: data.tags,
-    public: data.public
+    isPublic: data.isPublic
   })
   return res.data
-
 }
 
 export default {

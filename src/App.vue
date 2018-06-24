@@ -43,4 +43,7 @@
     color: #2c3e50;
     min-width: 500px;
   }
+  body {
+    scroll-behavior: smooth;
+  }
 </style>
