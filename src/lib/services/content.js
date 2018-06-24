@@ -8,7 +8,7 @@ async function AddText (data) {
   return res.data
 }
 
-async function GetText () {
+async function GetTexts () {
   let res = await this.$https.get('/content/texts')
   return res.data
 }
@@ -29,9 +29,15 @@ async function UpdateText(data) {
   return res.data
 }
 
+async function Get (id) {
+  let res = await this.$https.get('/content/content/' + id)
+  return res.data
+}
+
 export default {
   AddText: AddText,
-  GetText: GetText,
+  GetText: GetTexts,
   DeleteText: DeleteText,
-  UpdateText: UpdateText
+  UpdateText: UpdateText,
+  Get: Get
 }

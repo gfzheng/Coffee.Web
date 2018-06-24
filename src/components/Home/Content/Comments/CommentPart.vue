@@ -34,6 +34,7 @@
             </el-button>
           </div>
         </div>
+        </el-pagination>
         <transition name="el-zoom-in-top" @after-enter="enterReply">
           <div v-show="showReplyInput" class="reply-input-box">
             <el-input v-model="replyText" size="mini" placeholder="回复" ref="replyInput">
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
@@ -73,9 +74,9 @@ export default {
   },
   methods: {
     async likeIt (index) {
+      let contentId = index === -1 ? this.commentData.Comment.ID : this.commentData.Replies[index].Reply.ID
+      let likeType = index === -1 ? 'comment' : 'reply'
       try {
-        let contentId = index === -1 ? this.commentData.Comment.ID : this.commentData.Replies[index].Reply.ID
-        let likeType = index === -1 ? 'comment' : 'reply'
         if (this.likeData.includes(contentId)) {
           let res = await this.$service.like.Delete.call(this, {
             id: contentId,
@@ -105,7 +106,7 @@ export default {
             this.$notify.error('你就算点再快也只是只能赞一次的呀！👍')
           }
         }
-      } catch(error) {
+      } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
     },
@@ -198,7 +199,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.commentData.Replies)
     if (this.commentData.Replies === null) {
       this.commentData.Replies = []
     } else if (this.commentData.Replies.length > 0) {

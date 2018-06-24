@@ -9,12 +9,7 @@ async function Add (data) {
 }
 
 async function Get (data) {
-  let res = await this.$https.get('/comment/' + data.contentId, {
-    params: {
-      page: data.page,
-      eachPage: data.eachPage
-    }
-  })
+  let res = await this.$https.get('/comment/' + data.contentId)
   return res.data
 }
 

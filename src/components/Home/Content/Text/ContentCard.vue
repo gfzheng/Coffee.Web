@@ -26,7 +26,7 @@
             <el-button v-if="showEditButton" size="small" type="primary" icon="el-icon-edit" @click="showCard = false"></el-button>
           </el-row>
           <el-collapse-transition>
-            <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount"></comments>
+            <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount" :pageSize="5"></comments>
           </el-collapse-transition>
         </el-card>
       </div>
@@ -80,6 +80,7 @@ export default {
     this.checkText()
   },
   methods: {
+    // 为内容点赞
     async likeIt () {
       this.buttonLike = true
       try {
@@ -112,6 +113,7 @@ export default {
       this.buttonLike = false
     },
 
+    // 更新评论数量
     flushCount (num) {
       this.contentData.CommentNum = num
     },
@@ -142,7 +144,7 @@ export default {
     },
 
     gotoDetail () {
-      this.$router.push({ name: 'Detail' })
+      this.$router.push({ name: 'Detail', params: {id: this.contentData.ID }})
     },
 
   }

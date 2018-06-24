@@ -4,24 +4,27 @@
       <el-col class="info-box" :span="18">
         <el-button :class="[windowsScroll < 260 ? 'button-back': 'button-float']" type="primary" icon="el-icon-back" circle title="返回" @click="backPage"></el-button>
         <p class="info-title">
-          {{detail.title}}
+          {{detail.Name}}
         </p>
         <div class="info-name">
-          <img class="user-avatar" :src="own.avatar" />
+          <img class="user-avatar" :src="own.Avatar" />
           <div class="user-info">
-            <div class="user-name">{{own.name}}</div>
-            <div class="user-time">{{formatDate(detail.time)}}</div>
+            <div class="user-name">{{own.Name}}</div>
+            <div class="user-time">{{formatDate(detail.PublishDate)}}</div>
           </div>
         </div>
       </el-col>
     </el-row>
     <el-row class="home-body" :gutter="40" type="flex" justify="center">
       <el-col class="content" :span="18">
-        <div class="info-content">
-          {{windowsScroll}}
-          {{detail.content}}
+        <div class="info-content" v-html="htmlText" />
+        <div class="control">
+          <el-button @click="likeIt" :disabled="buttonLike" class="button-like" type="success" round :plain="!likeData.includes(detail.ID)">给你个赞 | {{detail.LikeNum}}</el-button>
         </div>
-         <comments :comments="detail.comments"></comments>
+        <div class="tag-box">
+          <el-tag class="tag" v-for="(tag, index) in detail.Tag" :key="index">{{tag}}</el-tag>
+        </div>
+        <comments v-if="loaded" :contentData="detail" @flushCount="flushCount" :pageSize="10"></comments>
       </el-col>
     </el-row>
   </div>
@@ -29,146 +32,175 @@
 
 <script>
 import comments from './Comments/Comments'
-  export default {
-    components: {
-      comments
-    },
-    data() {
-      return {
-        own: {
-          id: '12345',
-          name: 'ZhenlyChen',
-          avatar: 'https://violet-1252808268.cosgz.myqcloud.com/5a423d7b1957c732d450a4ac.jpg',
-        },
-        windowsScroll: 0,
-        detail: {
-          id: '123542334',
-          title: '我是一个标题',
-          content: '我是一个内容',
-          time: new Date(),
-          likeNum: 122,
-          commentNum: 12,
-          tags: ['有趣', '日记'],
-          isPublic: false,
-          comments: [{
-              userId: '12345',
-              userName: 'ZhenlyChen',
-              content: 'Hello, world',
-              likeNum: 33,
-              avatar: 'https://violet-1252808268.cosgz.myqcloud.com/5a423d7b1957c732d450a4ac.jpg',
-              time: new Date(),
-              reply: []
-            },
-            {
-              userId: '12345',
-              userName: 'ZhenlyChen',
-              content: 'Hello, world',
-              likeNum: 33,
-              avatar: 'https://violet-1252808268.cosgz.myqcloud.com/5a423d7b1957c732d450a4ac.jpg',
-              time: new Date(),
-              reply: [{
-                userId: '4567',
-                userName: 'MegaShow',
-                fatherId: '12345',
-                fatherName: 'ZhenlyChen',
-                content: 'No bb',
-                time: new Date()
-              }, {
-                userId: '12345',
-                userName: 'ZhenlyChen',
-                fatherId: '4567',
-                fatherName: 'MegaShow',
-                content: 'I bb',
-                time: new Date()
-              }]
-            }
-          ]
-        }
-      }
-    },
-    methods: {
-      formatDate(date) {
-        return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
+import {mapState} from 'vuex'
+export default {
+  components: {
+    comments
+  },
+  computed: {
+    ...mapState({
+      likeData: state => state.user.like,
+    }),
+    htmlText () {
+      return this.detail.Detail.replace(/\n/g, '<br/>').replace(/\ /g, '&nbsp;')
+    }
+  },
+  data () {
+    return {
+      loaded: false,
+      own: {
+        Name: '',
+        Avatar: ''
       },
-      backPage() {
-        this.$router.back()
+      windowsScroll: 0,
+      detail: {
+        Name: 'Coffee',
+        Detail: '',
+        PublishDate: new Date()
+      },
+      buttonLike: false
+    }
+  },
+  methods: {
+    async likeIt () {
+      this.buttonLike = true
+      try {
+        if (this.likeData.includes(this.detail.ID)) {
+          let res = await this.$service.like.Delete.call(this, {
+            id: this.detail.ID,
+            type: 'content'
+          })
+          if (res.State === 'success') {
+            await this.$service.like.Get.call(this)
+            this.detail.LikeNum--
+          } else {
+            throw res.State
+          }
+        } else {
+          let res = await this.$service.like.Add.call(this, {
+            id: this.detail.ID,
+            type: 'content'
+          })
+          if (res.State === 'success') {
+            await this.$service.like.Get.call(this)
+            this.detail.LikeNum++
+          } else {
+            throw res.State
+          }
+        }
+      } catch(error) {
+        this.$service.errorHandle.call(this, error)
       }
+      this.buttonLike = false
     },
-    mounted()
-    {
-      window.scrollTo(0,0)
-      window.onscroll = _ => {
-        this.windowsScroll = window.scrollY
+
+    flushCount (num) {
+
+    },
+    formatDate (date) {
+      return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
+    },
+    backPage () {
+      this.$router.back()
+    },
+    async getData () {
+      try {
+        let res = await this.$service.content.Get.call(this, this.$route.params.id)
+        if (res.State == 'success') {
+          this.own = res.User
+          this.detail = res.Data
+          this.loaded = true
+        } else {
+          this.$notify.error("你没有权限访问此内容")
+        }
+      } catch (error) {
+        this.$service.errorHandle.call(this, error)
       }
     }
+  },
+  mounted () {
+    window.scrollTo(0, 0)
+    window.onscroll = _ => {
+      this.windowsScroll = window.scrollY
+    }
+    this.getData()
   }
+}
 </script>
 
 
 <style lang="scss">
-  .detail {
-    background-image: url('../../../assets/wallhaven.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    .top-banner {
-      text-align: left;
-      height: 350px;
-      padding-top: 270px;
-      .info-box {
-        .button-back{
-          position: absolute;
-          left: 30px;
-          bottom: -18px;
+.detail {
+  background-image: url("../../../assets/wallhaven.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  .top-banner {
+    text-align: left;
+    height: 350px;
+    padding-top: 270px;
+    .info-box {
+      .button-back {
+        position: absolute;
+        left: 30px;
+        bottom: -18px;
+      }
+      .button-float {
+        position: fixed;
+        left: 20px;
+        top: 70px;
+      }
+      .info-title {
+        color: white;
+        margin-top: 40px;
+        font-size: 25px;
+      }
+      .info-name {
+        .user-avatar {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          vertical-align: middle;
+          margin-right: 10px;
         }
-        .button-float{
-          position: fixed;
-          left: 20px;
-          top: 70px;
-        }
-        .info-title {
-          color: white;
-          margin-top: 40px;
-          font-size: 25px;
-        }
-        .info-name {
-          .user-avatar {
-            height: 40px;
-            width: 40px;
-            border-radius: 50%;
-            vertical-align: middle;
-            margin-right: 10px;
+        .user-info {
+          display: inline-block;
+          vertical-align: bottom;
+          .user-name {
+            font-size: 16px;
           }
-          .user-info {
-            display: inline-block;
-            vertical-align: bottom;
-            .user-name {
-              font-size: 16px;
-            }
-            .user-time {
-              font-size: 14px;
-              color: grey;
-            }
+          .user-time {
+            font-size: 14px;
+            color: grey;
           }
         }
       }
-      z-index: 10;
     }
-    .home-body {
-      text-align: left;
-      box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
-      background-color: rgba(254, 254, 254, 0.95);
-      padding-top: 80px;
-      min-height: 800px;
-      .content {
-        max-width: 1100px;
-        .info-content {
-          padding: 20px 0;
-          color: rgb(68, 68, 68);
-          margin-top: 6px;
-          font-size: 15px;
-          min-height: 300px;
+    z-index: 10;
+  }
+  .home-body {
+    text-align: left;
+    box-shadow: 0px -2px 3px rgba($color: #292727, $alpha: 0.2);
+    background-color: rgba(254, 254, 254, 0.95);
+    padding-top: 80px;
+    min-height: 800px;
+    .content {
+      max-width: 1100px;
+      .info-content {
+        padding: 20px 0;
+        color: rgb(68, 68, 68);
+        margin-top: 6px;
+        font-size: 16px;
+        min-height: 300px;
+      }
+      .control {
+        text-align: center;
+        .button-like {
         }
+      }
+      .tag-box {
+        text-align: right;
       }
     }
   }
+}
 </style>

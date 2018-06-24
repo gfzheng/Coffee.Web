@@ -14,8 +14,13 @@
     <transition name="el-zoom-in-top">
       <edit-card @submit="getTextContent" v-if="newVisible"></edit-card>
     </transition>
-    <content-card @FlushTextList="getTextContent" v-for="(content, index) in contents" :contentData="content" :key="index"></content-card>
-    <el-pagination class="pagination" background layout="prev, pager, next" :page-size="15" :total="20" />
+    <content-card @FlushTextList="getTextContent" v-for="(content, index) in showText" :contentData="content" :key="index"></content-card>
+    <el-pagination class="pagination" v-show="contents.length > pageSize" :current-page="currentPage" background
+      layout="prev, pager, next" :page-size="pageSize" :total="contents.length" @current-change="changePage" />
+      <p class="bottom-under line-time">
+          <i class="fa fa-circle time-point" aria-hidden="true"></i>
+          <span class="time-text">没有了呀...😄</span>
+      </p>
   </div>
 </template>
 
@@ -25,18 +30,28 @@ import EditCard from './EditCard'
 export default {
   name: 'ContentText',
   computed: {
+    showText() {
+      if ((this.currentPage - 1) * this.pageSize > this.contents.length) this.currentPage--
+      return this.contents.slice((this.currentPage - 1) * this.pageSize,this.currentPage * this.pageSize)
+    }
   },
   components: {
     ContentCard, EditCard
   },
   data () {
     return {
+      currentPage: 1,
+      pageSize: 7,
       searchText: '',
       newVisible: false,
       contents: []
     }
   },
   methods: {
+
+    changePage(val) {
+      this.currentPage = val
+    },
 
     showNewCard () {
       this.newVisible = true;
@@ -89,6 +104,10 @@ export default {
       text-align: right;
     }
     margin: 20px 0 20px 28px;
+  }
+  .bottom-under {
+      padding-top: 100px;
+      padding-bottom: 50px;
   }
 }
 </style>

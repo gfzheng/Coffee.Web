@@ -5,7 +5,8 @@
         <el-button slot="append" icon="el-icon-check" @click="addComment"></el-button>
       </el-input>
     </el-row>
-    <comment-part v-for="(comment, index) in comments" :commentData="comment" :key="index" ref="commentPart" @flushComment="getComment"></comment-part>
+    <comment-part v-for="(comment, index) in showComments" :commentData="comment" :key="index" ref="commentPart" @flushComment="getComment"></comment-part>
+    <el-pagination v-show="comments.length > pageSize" class="page-change" layout="prev, pager, next" :page-size="pageSize" :total="comments.length" @current-change="changePage"/>
   </div>
 </template>
 
@@ -16,6 +17,9 @@ export default {
   props: {
     contentData: {
       require: true
+    },
+    pageSize: {
+      require: true
     }
   },
   components: {
@@ -24,10 +28,21 @@ export default {
   data () {
     return {
       comments: [],
-      commentText: ''
+      commentText: '',
+      currentPage: 1
+    }
+  },
+  computed: {
+    showComments() {
+      if ((this.currentPage - 1) * this.pageSize > this.comments.length) this.currentPage--
+      return this.comments.slice((this.currentPage - 1) * this.pageSize,this.currentPage * this.pageSize)
     }
   },
   methods: {
+    changePage(page) {
+      this.currentPage = page
+    },
+
     initComments () {
       this.commentText = ''
       for (let i in this.$refs.commentPart) {
@@ -38,9 +53,7 @@ export default {
     async getComment () {
       try {
         let res = await this.$service.comment.Get.call(this, {
-          contentId: this.contentData.ID,
-          page: 1,
-          eachPage: 10
+          contentId: this.contentData.ID
         })
         if (res.State !== "success") {
           this.$notify.error({
@@ -48,7 +61,7 @@ export default {
           })
         } else {
           this.comments = []
-            if (res.Data !== null) {
+          if (res.Data !== null) {
             this.$emit("flushCount", res.Data.length)
             this.$nextTick(_ => {
               this.comments = res.Data
@@ -78,7 +91,8 @@ export default {
             message: '评论成功',
             type: 'success'
           });
-          this.getComment()
+          await this.getComment()
+          this.currentPage = 1
         }
       } catch (error) {
         this.$service.errorHandle.call(this, error)
@@ -101,6 +115,12 @@ export default {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   .input-comment {
     margin-top: 10px;
+  }
+  .page-change{
+    text-align: center;
+    .btn-prev, .number , .btn-next{
+      background: transparent;
+    }
   }
 }
 </style>
