@@ -9,10 +9,10 @@ import NotLogin from '../pages/NotLogin.vue'
 import Square from '../components/Square/Square.vue'
 import Detail from '../components/Home/Content/Detail'
 
-import CommentBox from '../components/Home/Content/Message/CommentBox.vue'
-import LikeBox from '../components/Home/Content/Message/LikeBox.vue'
-import MessageBox from '../components/Home/Content/Message/MessageBox.vue'
-import SystemBox from '../components/Home/Content/Message/SystemBox.vue'
+import CommentBox from '../components/Home/Message/CommentBox.vue'
+import LikeBox from '../components/Home/Message/LikeBox.vue'
+import MessageBox from '../components/Home/Message/MessageBox.vue'
+import SystemBox from '../components/Home/Message/SystemBox.vue'
 
 Vue.use(Router)
 

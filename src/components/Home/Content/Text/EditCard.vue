@@ -1,9 +1,5 @@
 <template>
   <div class="edit-card">
-    <p class="line-time">
-      <i class="fa fa-circle time-point" aria-hidden="true"></i>
-      <span class="time-text">{{nowTime}}</span>
-    </p>
     <el-card class="new-text-card" shadow="hover">
       <div class="card-title">
         <span>记录点滴</span>
@@ -138,7 +134,11 @@ export default {
         }
         this.$emit('submit');
       })
-    }
+    },
+
+    formatTime(date) {
+      return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
+    },
 
   },
   mounted () {
@@ -148,11 +148,12 @@ export default {
       this.dynamicTags = this.rawData.Tag
       this.isPublic = this.rawData.Public
       this.isEdit = true
+      this.nowTime = this.formatTime(this.rawData.PublishDate)
     } else {
       this.title = this.$util.formatDate(new Date(), 'M月dd日')
-      this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
+      this.nowTime = this.formatTime(new Date())
       setInterval(_ => {
-        this.nowTime = this.$util.formatDate(new Date(), 'yyyy-M-dd hh:mm')
+        this.nowTime = this.formatTime(new Date())
       }, 30000)
     }
   }

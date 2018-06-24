@@ -24,6 +24,22 @@ async function GetInfo () {
   }
 }
 
+async function GetNewInfo() {
+  let res = (await this.$https.post('/users/info')).data
+  if (res.State === 'success') {
+    await GetInfo.call(this)
+  }
+}
+
+async function SetName(name) {
+  let res = (await this.$https.post('/users/name', {
+    name: name
+  })).data
+  if (res.State === 'success') {
+    await GetInfo.call(this)
+  }
+}
+
 async function Logout () {
   this.$store.commit('logout')
   window.localStorage.clear()
@@ -35,5 +51,7 @@ export default {
   GetVioletURL: GetVioletURL,
   Login: Login,
   GetInfo: GetInfo,
+  SetName: SetName,
+  GetNewInfo: GetNewInfo,
   Logout: Logout
 }

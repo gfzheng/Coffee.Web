@@ -14,7 +14,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: rgb(233, 217, 188);
+  background: rgb(245, 245, 245);
     .center {
       margin: 20% auto;
       user-select: none;

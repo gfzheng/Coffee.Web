@@ -191,11 +191,10 @@ export default {
         margin-top: 6px;
         font-size: 16px;
         min-height: 300px;
+        margin-bottom: 100px;
       }
       .control {
         text-align: center;
-        .button-like {
-        }
       }
       .tag-box {
         text-align: right;

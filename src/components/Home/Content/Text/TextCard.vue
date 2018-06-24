@@ -1,7 +1,10 @@
 <template>
-  <div class="content-card">
+  <div class="text-card">
+    <time-line :titleText="formatTime(contentData.PublishDate)"/>
     <transition name="el-zoom-in-center" @after-leave="showEdit = true">
-      <content-card v-show="showCard" :contentData="contentData" @showEdit="toEdit"/>
+      <el-card class="text-content" shadow="hover" v-show="showCard">
+        <content-card :contentData="contentData" @showEdit="toEdit" showEdit/>
+      </el-card>
     </transition>
     <transition name="el-zoom-in-center" @after-leave="showCard = true">
       <edit-card v-show="showEdit" @submit="doneEdit" @closeIt="showEdit = false" :rawData="contentData"></edit-card>
@@ -12,6 +15,7 @@
 <script>
 import EditCard from './EditCard'
 import ContentCard from '@/components/ContentCard'
+import TimeLine from '@/components/TimeLine'
 import { mapState } from 'vuex'
 export default {
   props: {
@@ -20,7 +24,7 @@ export default {
     }
   },
   components: {
-    EditCard, ContentCard
+    EditCard, ContentCard, TimeLine
   },
   data () {
     return {
@@ -29,6 +33,9 @@ export default {
     }
   },
   methods: {
+    formatTime(date) {
+      return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
+    },
     toEdit() {
       this.showEdit = true;
       this.showCard = false;
@@ -40,3 +47,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+ .text-card{
+   .text-content{
+     margin-left: 30px;
+   }
+ }
+</style>

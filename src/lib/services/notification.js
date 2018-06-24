@@ -7,7 +7,13 @@ async function Read (data) {
 
 async function Get (data) {
   let res = await this.$https.get('/notification/all')
-  return res.data
+  if (res.data.State === 'success') {
+    if (res.data.Notification !== null) {
+      this.$store.commit('setMessage', res.data.Notification)
+    }
+  } else {
+    throw res.State
+  }
 }
 
 async function GetUnread (data) {

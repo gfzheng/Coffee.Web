@@ -12,31 +12,34 @@
       </el-col>
     </el-row>
     <transition name="el-zoom-in-top">
-      <edit-card @submit="getTextContent" v-if="newVisible"></edit-card>
+      <div v-if="newVisible">
+        <time-line :titleText="nowTime"></time-line>
+        <edit-card @submit="getTextContent"></edit-card>
+      </div>
     </transition>
     <text-card @FlushTextList="getTextContent" v-for="(content, index) in showText" :contentData="content" :key="index"></text-card>
-    <el-pagination class="pagination" v-show="contents.length > pageSize" :current-page="currentPage" background
-      layout="prev, pager, next" :page-size="pageSize" :total="contents.length" @current-change="changePage" />
-      <p class="bottom-under line-time">
-          <i class="fa fa-circle time-point" aria-hidden="true"></i>
-          <span class="time-text">没有了呀...😄</span>
-      </p>
+    <el-pagination class="pagination" v-show="contents.length > pageSize" :current-page="currentPage" background layout="prev, pager, next" :page-size="pageSize" :total="contents.length" @current-change="changePage" />
+    <p class="bottom-under line-time">
+      <i class="fa fa-circle time-point" aria-hidden="true"></i>
+      <span class="time-text">没有了呀...😄</span>
+    </p>
   </div>
 </template>
 
 <script>
 import TextCard from './TextCard'
 import EditCard from './EditCard'
+import TimeLine from '@/components/TimeLine'
 export default {
   name: 'ContentText',
   computed: {
-    showText() {
+    showText () {
       if ((this.currentPage - 1) * this.pageSize > this.contents.length) this.currentPage--
-      return this.contents.slice((this.currentPage - 1) * this.pageSize,this.currentPage * this.pageSize)
+      return this.contents.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
     }
   },
   components: {
-    TextCard, EditCard
+    TextCard, EditCard, TimeLine
   },
   data () {
     return {
@@ -44,12 +47,17 @@ export default {
       pageSize: 7,
       searchText: '',
       newVisible: false,
-      contents: []
+      contents: [],
+      nowTime: new Date()
     }
   },
   methods: {
 
-    changePage(val) {
+    formatTime (date) {
+      return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
+    },
+
+    changePage (val) {
       this.currentPage = val
     },
 
@@ -66,9 +74,12 @@ export default {
         let res = await this.$service.content.GetText.call(this)
         this.contents = []
         this.closeNewCard()
-        this.$nextTick(_ => {
-          this.contents = res.Data
-        })
+        if (res.Data !== null) {
+          this.$nextTick(_ => {
+            this.contents = res.Data
+          })
+
+        }
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
@@ -86,6 +97,10 @@ export default {
     // 获取信息
     this.getTextContent()
     this.getLike()
+    this.nowTime = this.formatTime(new Date())
+    setInterval(_ => {
+      this.nowTime = this.formatTime(new Date())
+    }, 30000)
   }
 }
 </script>
@@ -106,8 +121,28 @@ export default {
     margin: 20px 0 20px 28px;
   }
   .bottom-under {
-      padding-top: 100px;
-      padding-bottom: 50px;
+    padding-top: 100px;
+    padding-bottom: 50px;
   }
+}
+
+.line-time {
+  &:hover {
+    .time-point {
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+  }
+  .time-point {
+    color: white;
+    margin-left: -10px;
+    border: 2px solid orange;
+    border-radius: 100%;
+  }
+  .time-text {
+    margin-left: 20px;
+    font-size: 18px;
+  }
+  padding-top: 10px;
+  color: rgb(206, 161, 123);
 }
 </style>

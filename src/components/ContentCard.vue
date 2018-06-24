@@ -1,32 +1,26 @@
 <template>
   <div class="content-card">
-    <p v-if="showTimeLine" class="line-time">
-      <i class="fa fa-circle time-point" aria-hidden="true"></i>
-      <span class="time-text">{{formatTime(contentData.PublishDate)}}</span>
-    </p>
-    <el-card class="text-box" shadow="hover">
-      <span v-if="!contentData.Public" class="lock-text">
-        <i v-if="!contentData.Public" class="fa fa-lock fa-fw" aria-hidden="true"></i>
-        仅自己可见
-      </span>
-      <p class="title" @click="gotoDetail">{{contentData.Name}}</p>
-      <p class="text-body" v-html="bodyText"></p>
-      <p class="see-all" v-if="moreText&&!seeAll" @click="seeAll = true">查看全部</p>
-      <p class="see-all" v-if="seeAll" @click="seeAll = false">收起全文</p>
-      <div class="tag-box">
-        <el-tag size="small" class="tag" v-for="(tag, index) in contentData.Tag" :key="index">{{tag}}</el-tag>
-      </div>
-      <el-row class="control-box">
-        <el-button :disabled="buttonLike" size="small" type="success" :plain="!likeData.includes(contentData.ID)" @click="likeIt">
-          <i class="fa fa-thumbs-up fa-fw" aria-hidden="true"></i> | {{contentData.LikeNum}}</el-button>
-        <el-button size="small" type="warning" @click="toComment">
-          <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> | {{contentData.CommentNum}}</el-button>
-        <el-button v-if="showEditButton" size="small" type="primary" icon="el-icon-edit" @click="$emit('showEdit')"></el-button>
-      </el-row>
-      <el-collapse-transition>
-        <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount" :pageSize="5"></comments>
-      </el-collapse-transition>
-    </el-card>
+    <span v-if="!contentData.Public" class="lock-text">
+      <i v-if="!contentData.Public" class="fa fa-lock fa-fw" aria-hidden="true"></i>
+      仅自己可见
+    </span>
+    <p class="title" @click="gotoDetail">{{contentData.Name}}</p>
+    <p class="text-body" v-html="bodyText"></p>
+    <p class="see-all" v-if="moreText&&!seeAll" @click="seeAll = true">查看全部</p>
+    <p class="see-all" v-if="seeAll" @click="seeAll = false">收起全文</p>
+    <div class="tag-box">
+      <el-tag size="small" class="tag" v-for="(tag, index) in contentData.Tag" :key="index">{{tag}}</el-tag>
+    </div>
+    <el-row class="control-box">
+      <el-button :disabled="buttonLike" size="small" type="success" :plain="!likeData.includes(contentData.ID)" @click="likeIt">
+        <i class="fa fa-thumbs-up fa-fw" aria-hidden="true"></i> | {{contentData.LikeNum}}</el-button>
+      <el-button size="small" type="warning" @click="toComment">
+        <i class="fa fa-commenting-o fa-fw" aria-hidden="true"></i> | {{contentData.CommentNum}}</el-button>
+      <el-button v-if="showEdit" size="small" type="primary" icon="el-icon-edit" @click="$emit('showEdit')"></el-button>
+    </el-row>
+    <el-collapse-transition>
+      <comments v-if="showComment" ref="commentsChild" :contentData="contentData" @flushCount="flushCount" :pageSize="5"></comments>
+    </el-collapse-transition>
   </div>
 </template>
 
@@ -38,8 +32,9 @@ export default {
     contentData: {
       require: true
     },
-    closeTimeLine: {
+    showEdit: {
       type: Boolean,
+      default: false,
       require: false
     }
   },
@@ -48,8 +43,6 @@ export default {
   },
   data () {
     return {
-      showTimeLine: true,
-      showEditButton: true,
       showComment: false,
       moreText: false,
       seeAll: false,
@@ -72,9 +65,6 @@ export default {
     }
   },
   mounted () {
-    if (this.closeTimeLine === true) {
-      this.showTimeLine = false
-    }
     this.checkText()
   },
   methods: {
@@ -173,50 +163,46 @@ export default {
 
 .content-card {
   text-align: left;
-  .text-box {
-    margin-left: 30px;
-
-    .control-box {
-      margin-top: 15px;
-      text-align: right;
+  .control-box {
+    margin-top: 15px;
+    text-align: right;
+  }
+  .title {
+    display: inline-block;
+    margin-bottom: 5px;
+    user-select: none;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 23px;
+    transition: all 0.5s;
+    &:hover {
+      color: rgb(73, 73, 73);
+      transform: translateY(-3px);
     }
-    .title {
-      display: inline-block;
-      margin-bottom: 5px;
-      user-select: none;
-      cursor: pointer;
-      margin-top: 5px;
-      font-size: 23px;
-      transition: all 0.5s;
-      &:hover {
-        color: rgb(73, 73, 73);
-        transform: translateY(-3px);
-      }
-    }
-    .text-body {
-      color: rgb(59, 59, 59);
-      margin: 20px 20px 20px 20px;
-    }
-    .see-all {
-      display: inline;
-      cursor: pointer;
-      font-size: 14px;
-      color: rgb(45, 45, 151);
-      &:hover {
-        color: gray;
-      }
-    }
-    .tag-box {
-      text-align: right;
-      .tag {
-        margin-left: 5px;
-      }
-    }
-    .lock-text {
-      float: right;
+  }
+  .text-body {
+    color: rgb(59, 59, 59);
+    margin: 20px 20px 20px 20px;
+  }
+  .see-all {
+    display: inline;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(45, 45, 151);
+    &:hover {
       color: gray;
-      font-size: 13px;
     }
+  }
+  .tag-box {
+    text-align: right;
+    .tag {
+      margin-left: 5px;
+    }
+  }
+  .lock-text {
+    float: right;
+    color: gray;
+    font-size: 13px;
   }
 }
 </style>
