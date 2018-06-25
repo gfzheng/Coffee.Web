@@ -36,7 +36,7 @@ const mutations = {
     for (let m of state.message) {
       if (!m.Data.Read) {
         state.unread[m.Data.Type]++
-        state.all++
+        if (m.Data.Type !== 'like') state.unread.all++
       }
       if (m.Data.Type === 'reply') {
         state.reply.push(m)

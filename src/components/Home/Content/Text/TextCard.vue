@@ -3,7 +3,7 @@
     <time-line :titleText="formatTime(contentData.PublishDate)"/>
     <transition name="el-zoom-in-center" @after-leave="showEdit = true">
       <el-card class="text-content" shadow="hover" v-show="showCard">
-        <content-card :contentData="contentData" @showEdit="toEdit" showEdit/>
+        <content-card :contentData="contentData" @showEdit="showCard = false" :showEdit="!$route.params.id"/>
       </el-card>
     </transition>
     <transition name="el-zoom-in-center" @after-leave="showCard = true">
@@ -35,10 +35,6 @@ export default {
   methods: {
     formatTime(date) {
       return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
-    },
-    toEdit() {
-      this.showEdit = true;
-      this.showCard = false;
     },
     doneEdit () {
       this.showEdit = false

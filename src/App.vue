@@ -21,9 +21,14 @@
     },
     async mounted() {
       console.log(this.logged,this.$route.name)
-      if (this.$route.name !== 'Login' && this.$route.name !== 'Square') {
+      if (this.$route.name !== 'Login' && this.$route.name !== 'Square' && this.$route.name !== 'User') {
         try{
-          await this.$service.user.GetInfo.call(this)
+          let res = await this.$service.user.GetInfo.call(this)
+          if (res.State !== 'success') {
+            Logout.call(this)
+          } else {
+            this.$store.commit('setInfo', res)
+          }
         } catch(err) {
           this.$service.user.Logout.call(this)
         }

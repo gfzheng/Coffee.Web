@@ -12,7 +12,6 @@
         <el-card class="tab-card" shadow="hover">
           Coming soon...
         </el-card>
-        <!-- <el-pagination background layout="prev, pager, next" :page-size="15" :total="500"> -->
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="movie">
@@ -20,7 +19,6 @@
         <el-card class="tab-card" shadow="hover">
           Coming soon...
         </el-card>
-        <!-- <el-pagination background layout="prev, pager, next" :page-size="15" :total="500"> -->
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="app">
@@ -28,7 +26,6 @@
         <el-card class="tab-card" shadow="hover">
           Coming soon...
         </el-card>
-        <!-- <el-pagination background layout="prev, pager, next" :page-size="15" :total="500"> -->
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="game">
@@ -36,7 +33,6 @@
         <el-card class="tab-card" shadow="hover">
           Coming soon...
         </el-card>
-        <!-- <el-pagination background layout="prev, pager, next" :page-size="15" :total="500"> -->
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="doc">
@@ -44,7 +40,6 @@
         <el-card class="tab-card" shadow="hover">
           Coming soon...
         </el-card>
-        <!-- <el-pagination background layout="prev, pager, next" :page-size="15" :total="500"/> -->
       </el-tab-pane>
     </el-tabs>
   </div>

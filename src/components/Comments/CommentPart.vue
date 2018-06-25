@@ -1,8 +1,8 @@
 <template>
   <el-row class="users-comment">
-    <div>
+    <div class="user-info">
       <img class="user-avatar" :src="commentData.User.Avatar">
-      <div class="comment-name">
+      <div class="comment-name" @click="gotoUser(commentData.Comment.UserID)">
         <div class="name">{{commentData.User.Name}}</div>
         <div class="time">{{formatTime(commentData.Comment.Date)}}</div>
       </div>
@@ -20,8 +20,8 @@
       </el-button>
       <div v-show="showReply" class="comment-reply">
         <div v-for="(reply, index) in commentData.Replies" :key="index">
-          <span class="reply-name">{{reply.User.Name}}: </span>
-          <span class="reply-father">@{{reply.Father.Name}} </span>
+          <span class="reply-name" @click="gotoUser(reply.Reply.UserID)">{{reply.User.Name}}: </span>
+          <span class="reply-father" @click="gotoUser(reply.Reply.FatherID)">@{{reply.Father.Name}} </span>
           <span class="reply-content">{{reply.Reply.Content}} </span>
           <div class="reply-control">
             <span class="reply-time">{{formatTime(reply.Reply.Date)}}</span>
@@ -114,6 +114,10 @@ export default {
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
+    },
+
+    gotoUser (userId) {
+      this.$router.push({ name: 'User', params: { id: userId } })
     },
 
     async addReply () {
@@ -226,17 +230,6 @@ export default {
   .content-box {
     margin-top: 20px;
   }
-  .comment-name {
-    padding-top: 14px;
-    display: inline-block;
-    .name {
-      font-weight: bold;
-    }
-    .time {
-      font-size: 11px;
-      color: rgb(180, 175, 175);
-    }
-  }
   .comment-content {
     margin: 10px 20px;
     color: gray;
@@ -268,10 +261,12 @@ export default {
         margin-top: 15px;
       }
       .reply-name {
+        cursor: pointer;
         color: #409eff;
         margin-right: 4px;
       }
       .reply-father {
+        cursor: pointer;
         color: #409eff;
       }
       .reply-content {
@@ -293,12 +288,26 @@ export default {
       }
     }
   }
-  .user-avatar {
-    vertical-align: top;
-    margin: 10px;
-    height: 35px;
-    width: 35px;
-    border-radius: 50%;
+  .user-info {
+    cursor: pointer;
+    .user-avatar {
+      vertical-align: top;
+      margin: 10px;
+      height: 35px;
+      width: 35px;
+      border-radius: 50%;
+    }
+    .comment-name {
+      padding-top: 14px;
+      display: inline-block;
+      .name {
+        font-weight: bold;
+      }
+      .time {
+        font-size: 11px;
+        color: rgb(180, 175, 175);
+      }
+    }
   }
 }
 </style>

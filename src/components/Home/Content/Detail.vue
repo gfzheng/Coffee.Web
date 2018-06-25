@@ -128,9 +128,9 @@ export default {
   },
   mounted () {
     window.scrollTo(0, 0)
-    window.onscroll = _ => {
+    window.addEventListener('scroll',(e) => {
       this.windowsScroll = window.scrollY
-    }
+    })
     this.getData()
   }
 }

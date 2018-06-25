@@ -87,7 +87,8 @@ export default {
 .comment-box {
  .comment-card{
    .button-delete{
-     margin-top: -20px;
+     margin-top: -25px;
+     margin-right: -15px;
      float: right;
    }
    margin-bottom: 20px;
@@ -114,6 +115,7 @@ export default {
     color: gray;
   }
   .badge-new{
+    margin-top: -10px;
     float: right;
   }
   .control-box{

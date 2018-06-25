@@ -9,6 +9,8 @@ import NotLogin from '../pages/NotLogin.vue'
 import Square from '../components/Square/Square.vue'
 import Detail from '../components/Home/Content/Detail'
 
+import User from '../components/Home/User.vue'
+
 import CommentBox from '../components/Home/Message/CommentBox.vue'
 import LikeBox from '../components/Home/Message/LikeBox.vue'
 import MessageBox from '../components/Home/Message/MessageBox.vue'
@@ -20,7 +22,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '',
+      path: '/home',
       name: 'Home',
       component: Home,
       children: [{
@@ -62,11 +64,6 @@ export default new Router({
       component: Detail
     },
     {
-      path: '/square',
-      name: 'Square',
-      component: Square
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login
@@ -79,7 +76,12 @@ export default new Router({
     {
       path: '/user/:id',
       name: 'User',
-      component: Home
+      component: User
+    },
+    {
+      path: '',
+      name: 'Square',
+      component: Square
     }
   ]
 })

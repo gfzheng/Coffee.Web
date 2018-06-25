@@ -8,14 +8,9 @@ async function AddText (data) {
   return res.data
 }
 
-async function GetTexts () {
-  let res = await this.$https.get('/content/texts')
-  return res.data
-}
-
-async function Delete(id) {
-  console.log(id)
-  let res = await this.$https.delete('/content/' + id)
+async function GetTexts (id) {
+  if (!id) id = 'self'
+  let res = await this.$https.get('/content/texts/' + id)
   return res.data
 }
 
@@ -44,11 +39,19 @@ async function GetPublic (page, eachPage) {
   return res.data
 }
 
+async function Delete(id) {
+  console.log(id)
+  let res = await this.$https.delete('/content/' + id)
+  return res.data
+}
+
 export default {
+  // Content
+  Get: Get,
+  GetPublic: GetPublic,
+  Delete: Delete,
+  // Text
   AddText: AddText,
   GetText: GetTexts,
-  Delete: Delete,
-  UpdateText: UpdateText,
-  Get: Get,
-  GetPublic: GetPublic
+  UpdateText: UpdateText
 }

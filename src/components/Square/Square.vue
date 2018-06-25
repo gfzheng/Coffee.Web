@@ -13,7 +13,7 @@
           <div class="info-name">
             <img class="user-avatar" :src="content.User.Avatar" />
             <div class="user-info">
-              <div class="user-name">{{content.User.Name}}</div>
+              <div class="user-name"><a @click="gotoUser(content.Data.OwnID)">{{content.User.Name}}</a></div>
             </div>
           </div>
           <content-card class="content-body" :contentData="content.Data" :key="index" />
@@ -62,6 +62,10 @@ export default {
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
+    },
+
+    gotoUser(userId) {
+      this.$router.push({ name: 'User', params: { id: userId } })
     },
 
     loadMore() {
@@ -124,6 +128,7 @@ export default {
   .public-card {
     margin-bottom: 30px;
     .info-name {
+      cursor: pointer;
       margin-bottom: 10px;
       .user-avatar {
         height: 25px;

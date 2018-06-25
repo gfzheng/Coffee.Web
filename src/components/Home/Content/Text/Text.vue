@@ -1,6 +1,6 @@
 <template>
   <div class="content-text">
-    <el-row class="tool-bar" type="flex" justify="space-between">
+    <el-row v-if="!$route.params.id" class="tool-bar" type="flex" justify="space-between">
       <el-col>
         <el-input class="input-search" placeholder="请输入内容" v-model="searchText" clearable>
           <el-button slot="append" icon="el-icon-search"></el-button>
@@ -71,7 +71,7 @@ export default {
 
     async getTextContent () {
       try {
-        let res = await this.$service.content.GetText.call(this)
+        let res = await this.$service.content.GetText.call(this, this.$route.params.id || '')
         this.contents = []
         this.closeNewCard()
         if (res.Data !== null) {
@@ -94,6 +94,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$route.params.id)
     // 获取信息
     this.getTextContent()
     this.getLike()
