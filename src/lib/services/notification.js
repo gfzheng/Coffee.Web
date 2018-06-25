@@ -1,6 +1,6 @@
 async function Read (data) {
-  let res = await this.$https.patch('/notification/' + data.id, {
-    isRead: data.read
+  let res = await this.$https.patch('/notification/read/' + data.id, {
+    isRead: data.isRead
   })
   return res.data
 }
@@ -10,6 +10,8 @@ async function Get (data) {
   if (res.data.State === 'success') {
     if (res.data.Notification !== null) {
       this.$store.commit('setMessage', res.data.Notification)
+    } else {
+      this.$store.commit('setMessage',[])
     }
   } else {
     throw res.State

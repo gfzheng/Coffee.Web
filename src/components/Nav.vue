@@ -20,7 +20,8 @@
       <el-submenu class="menu-user" index="3" v-if="logged">
         <template slot="title">
           <img class="user-avatar" :src="avatar">
-          <el-badge :is-dot="notif">{{name}}</el-badge>
+          <el-badge :is-dot="notif" v-if="all > 0">{{name}}</el-badge>
+          <span v-else>{{name}}</span>
         </template>
         <div class="item-space" index="Space">
           <p class="space-name"><span class="span-name">{{name}}</span><el-tag size="small">{{userClass}}</el-tag></p>
@@ -28,7 +29,7 @@
           <el-progress class="progress" :text-inside="true" :stroke-width="18" :percentage="spacePercentage" color="#8e71c7"></el-progress>
         </div>
         <el-menu-item index="Message">
-          我的消息<el-badge class="message-dot" :value="notifCount" :max="99"></el-badge>
+          我的消息<el-badge class="message-dot" v-if="all > 0" :value="notifCount" :max="99"></el-badge>
         </el-menu-item>
         <el-menu-item index="Setting">个人设置</el-menu-item>
         <el-menu-item index="Logout">退出登陆</el-menu-item>
@@ -48,7 +49,8 @@
         avatar: state => state.user.info.Avatar,
         class: state => state.user.class,
         maxSize: state => state.user.maxSize,
-        usedSize: state => state.user.usedSize
+        usedSize: state => state.user.usedSize,
+        all: s => s.message.unread.all
       }),
       textUsedSize() {
         return this.fixSizeNum(this.usedSize)

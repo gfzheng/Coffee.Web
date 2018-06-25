@@ -123,7 +123,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         try {
-          let res = await this.$service.content.DeleteText.call(this, this.rawData.ID)
+          let res = await this.$service.content.Delete.call(this, this.rawData.ID)
           console.log(res)
         } catch (error) {
           this.$service.errorHandle.call(this, error, msg => {

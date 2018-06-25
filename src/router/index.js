@@ -75,6 +75,11 @@ export default new Router({
       path: '/youShouldLogin',
       name: 'NotLogin',
       component: NotLogin
+    },
+    {
+      path: '/user/:id',
+      name: 'User',
+      component: Home
     }
   ]
 })

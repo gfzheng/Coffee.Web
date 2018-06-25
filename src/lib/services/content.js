@@ -13,9 +13,9 @@ async function GetTexts () {
   return res.data
 }
 
-async function DeleteText(id) {
+async function Delete(id) {
   console.log(id)
-  let res = await this.$https.delete('/content/text/' + id)
+  let res = await this.$https.delete('/content/' + id)
   return res.data
 }
 
@@ -30,7 +30,7 @@ async function UpdateText(data) {
 }
 
 async function Get (id) {
-  let res = await this.$https.get('/content/content/' + id)
+  let res = await this.$https.get('/content/detail/' + id)
   return res.data
 }
 
@@ -47,7 +47,7 @@ async function GetPublic () {
 export default {
   AddText: AddText,
   GetText: GetTexts,
-  DeleteText: DeleteText,
+  Delete: Delete,
   UpdateText: UpdateText,
   Get: Get,
   GetPublic: GetPublic

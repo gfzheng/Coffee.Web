@@ -17,7 +17,7 @@ async function Get (data) {
 }
 
 async function Delete (data) {
-  let res = await this.$https.put('/like/' + data.id, {
+  let res = await this.$https.patch('/like/' + data.id, {
     isContent: data.type === 'content',
     isComment: data.type === 'comment',
     isReply: data.type === 'reply'

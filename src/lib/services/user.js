@@ -1,5 +1,5 @@
 async function GetVioletURL (url) {
-  let res = await this.$https.get('/users/login', {
+  let res = await this.$https.get('/user/login', {
     params: {
       RedirectURL: url
     }
@@ -8,7 +8,7 @@ async function GetVioletURL (url) {
 }
 
 async function Login (code, state) {
-  let res = await this.$https.post('/users/login', {
+  let res = await this.$https.post('/user/login', {
     code: code,
     state: state
   })
@@ -16,8 +16,8 @@ async function Login (code, state) {
 }
 
 async function GetInfo () {
-  let res = (await this.$https.get('/users/info')).data
-  if (res.State === 'error') {
+  let res = (await this.$https.get('/user/info')).data
+  if (res.State !== 'success') {
     Logout.call(this)
   } else {
     this.$store.commit('setInfo', res)
@@ -25,14 +25,14 @@ async function GetInfo () {
 }
 
 async function GetNewInfo() {
-  let res = (await this.$https.post('/users/info')).data
+  let res = (await this.$https.post('/user/info')).data
   if (res.State === 'success') {
     await GetInfo.call(this)
   }
 }
 
 async function SetName(name) {
-  let res = (await this.$https.post('/users/name', {
+  let res = (await this.$https.post('/user/name', {
     name: name
   })).data
   if (res.State === 'success') {
@@ -44,7 +44,7 @@ async function Logout () {
   this.$store.commit('logout')
   window.localStorage.clear()
   this.$router.push({ name: 'NotLogin' })
-  await this.$https.post('/users/logout')
+  await this.$https.post('/user/logout')
 }
 
 export default {

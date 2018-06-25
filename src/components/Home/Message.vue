@@ -9,7 +9,7 @@
               <el-badge v-if="unread.reply > 0" :value="unread.reply" />
             </span>
           </el-menu-item>
-          <el-menu-item index="likes">
+          <el-menu-item index="likes" v-if="false">
             <i class="fa fa-heart fa-fw fa-menu" aria-hidden="true"></i>
             <span slot="title">收到的点赞
               <el-badge v-if="unread.like > 0" :value="unread.like" />
@@ -69,7 +69,7 @@ export default {
     },
     async GetMessage () {
       try {
-        let res = await this.$service.notification.Get.call(this)
+        await this.$service.notification.Get.call(this)
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
