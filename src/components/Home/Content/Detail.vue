@@ -40,6 +40,7 @@ export default {
   computed: {
     ...mapState({
       likeData: state => state.user.like,
+      logged: s => s.user.logged
     }),
     htmlText () {
       return this.detail.Detail.replace(/\n/g, '<br/>').replace(/\ /g, '&nbsp;')
@@ -64,6 +65,13 @@ export default {
   methods: {
     async likeIt () {
       this.buttonLike = true
+      if (!this.logged) {
+        this.$message.error("请先登陆")
+        this.$nextTick(_ => {
+          this.buttonLike = false
+        })
+        return
+      }
       try {
         if (this.likeData.includes(this.detail.ID)) {
           let res = await this.$service.like.Delete.call(this, {

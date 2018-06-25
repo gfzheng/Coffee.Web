@@ -52,6 +52,7 @@ export default {
   computed: {
     ...mapState({
       likeData: state => state.user.like,
+      logged: s => s.user.logged
     }),
     bodyText () {
       this.checkText()
@@ -71,6 +72,13 @@ export default {
     // 为内容点赞
     async likeIt () {
       this.buttonLike = true
+      if (!this.logged) {
+        this.$message.error("请先登陆")
+        this.$nextTick(_ => {
+          this.buttonLike = false
+        })
+        return
+      }
       try {
         if (this.likeData.includes(this.contentData.ID)) {
           let res = await this.$service.like.Delete.call(this, {
@@ -98,7 +106,9 @@ export default {
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
-      this.buttonLike = false
+      this.$nextTick(_ => {
+        this.buttonLike = false
+      })
     },
 
     // 更新评论数量

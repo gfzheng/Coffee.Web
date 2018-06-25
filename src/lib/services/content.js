@@ -34,11 +34,11 @@ async function Get (id) {
   return res.data
 }
 
-async function GetPublic () {
+async function GetPublic (page, eachPage) {
   let res = await this.$https.get('/content/public', {
     params: {
-      page: 1,
-      eachPage: 10
+      page: page,
+      eachPage: eachPage
     }
   })
   return res.data

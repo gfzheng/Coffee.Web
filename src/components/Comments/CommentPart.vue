@@ -53,7 +53,8 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      likeData: state => state.user.like
+      likeData: state => state.user.like,
+      logged: s => s.user.logged
     })
   },
   props: {
@@ -74,6 +75,10 @@ export default {
   },
   methods: {
     async likeIt (index) {
+      if (!this.logged) {
+        this.$message.error("请先登陆")
+        return
+      }
       let contentId = index === -1 ? this.commentData.Comment.ID : this.commentData.Replies[index].Reply.ID
       let likeType = index === -1 ? 'comment' : 'reply'
       try {
@@ -112,6 +117,10 @@ export default {
     },
 
     async addReply () {
+      if (!this.logged) {
+        this.$message.error("请先登陆")
+        return
+      }
       try {
         let res = await this.$service.comment.Add.call(this, {
           contentId: this.commentData.Comment.ID,

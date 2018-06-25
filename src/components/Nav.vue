@@ -104,8 +104,6 @@
       };
     },
     mounted() {
-      console.log(this.$route.path)
-      console.log(this.$route.name)
       if (this.$route.path.toLowerCase() === '/square') {
         this.activeIndex = 'Square'
       } else if (this.$route.path.toLowerCase() === '') {
@@ -114,6 +112,8 @@
         this.activeIndex = 'Message'
       } else if (this.$route.path.toLowerCase() === '/setting') {
         this.activeIndex = 'Setting'
+      } else {
+        this.activeIndex = 'Nothing'
       }
     },
     methods: {

@@ -12,6 +12,7 @@
 
 <script>
 import CommentPart from './CommentPart'
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -36,7 +37,10 @@ export default {
     showComments() {
       if ((this.currentPage - 1) * this.pageSize > this.comments.length) this.currentPage--
       return this.comments.slice((this.currentPage - 1) * this.pageSize,this.currentPage * this.pageSize)
-    }
+    },
+    ...mapState({
+      logged: s => s.user.logged
+    })
   },
   methods: {
     changePage(page) {
@@ -74,6 +78,10 @@ export default {
     },
 
     async addComment () {
+      if (!this.logged) {
+        this.$message.error("请先登陆")
+        return
+      }
       try {
         let res = await this.$service.comment.Add.call(this, {
           contentId: this.contentData.ID,

@@ -21,8 +21,7 @@
     },
     async mounted() {
       console.log(this.logged,this.$route.name)
-      console.log(this.$route.name !== 'Login')
-      if (this.$route.name !== 'Login') {
+      if (this.$route.name !== 'Login' && this.$route.name !== 'Square') {
         try{
           await this.$service.user.GetInfo.call(this)
         } catch(err) {
