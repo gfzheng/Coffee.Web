@@ -1,5 +1,6 @@
 
 const state = {
+  userId: '',
   logged: false,
   email: '',
   name: '',
@@ -21,6 +22,7 @@ const actions = {}
 const mutations = {
   setInfo (state, data) {
     state.logged = true
+    state.userId = data.ID
     state.name = data.Name
     state.class = data.Class
     state.email = data.Email

@@ -128,6 +128,7 @@ export default {
           this.activeIndex = 'Square'
           break
         case 'Home':
+        case 'Tab':
           this.activeIndex = 'Home'
           break
         case 'Setting':

@@ -15,7 +15,7 @@
       <el-button type="text" class="button-reply" @click="toReply">
         <i class="fa fa-comments fa-fw" aria-hidden="true"></i> {{replyCount}}
       </el-button>
-      <el-button type="text" class="button-reply" @click="deleteComment(0)">
+      <el-button type="text" class="button-reply" @click="deleteComment(0)" v-if="userId === commentData.Comment.UserID">
         <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> 删除
       </el-button>
       <div v-show="showReply" class="comment-reply">
@@ -29,7 +29,7 @@
               <i class="fa fa-thumbs-up fa-fw" aria-hidden="true"></i> 赞 ({{reply.Reply.LikeNum}})</el-button>
             <el-button type="text" class="reply-reply" @click="toReplyIt(index)">
               <i class="fa fa-comments-o fa-fw" aria-hidden="true"></i> 回复</el-button>
-            <el-button type="text" class="reply-reply" @click="deleteComment(reply.Reply.ID)">
+            <el-button type="text" class="reply-reply" @click="deleteComment(reply.Reply.ID)" v-if="userId === reply.Reply.UserID">
               <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> 删除
             </el-button>
           </div>
@@ -54,7 +54,8 @@ export default {
   computed: {
     ...mapState({
       likeData: state => state.user.like,
-      logged: s => s.user.logged
+      logged: s => s.user.logged,
+      userId: s => s.user.userId
     })
   },
   props: {

@@ -69,7 +69,7 @@ export default {
             isPublic: this.isPublic,
             tags: this.dynamicTags
           })
-          if (res.State != 'success') {
+          if (res.State !== 'success') {
             console.log(res)
             this.$message.error("非法请求")
           }

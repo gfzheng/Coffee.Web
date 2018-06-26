@@ -8,6 +8,15 @@ async function AddText (data) {
   return res.data
 }
 
+async function AddAlbum (data) {
+  let res = await this.$https.post('/content/album', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return res.data
+}
+
 async function GetTexts (id) {
   if (!id) id = 'self'
   let res = await this.$https.get('/content/texts/' + id)
@@ -53,5 +62,7 @@ export default {
   // Text
   AddText: AddText,
   GetText: GetTexts,
-  UpdateText: UpdateText
+  UpdateText: UpdateText,
+  // Album
+  AddAlbum: AddAlbum
 }
