@@ -23,8 +23,14 @@ async function GetTexts (id) {
   return res.data
 }
 
-async function UpdateText(data) {
-  let res = await this.$https.patch('/content/text/' + data.id, {
+async function GetAlbum (id) {
+  if (!id) id = 'self'
+  let res = await this.$https.get('/content/album/' + id)
+  return res.data
+}
+
+async function Update (data) {
+  let res = await this.$https.patch('/content/all/' + data.id, {
     title: data.title,
     content: data.content,
     tags: data.tags,
@@ -48,7 +54,7 @@ async function GetPublic (page, eachPage) {
   return res.data
 }
 
-async function Delete(id) {
+async function Delete (id) {
   console.log(id)
   let res = await this.$https.delete('/content/' + id)
   return res.data
@@ -62,7 +68,8 @@ export default {
   // Text
   AddText: AddText,
   GetText: GetTexts,
-  UpdateText: UpdateText,
+  Update: Update,
   // Album
-  AddAlbum: AddAlbum
+  AddAlbum: AddAlbum,
+  GetAlbum: GetAlbum
 }

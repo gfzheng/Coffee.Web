@@ -14,7 +14,7 @@ async function Get (data) {
       this.$store.commit('setMessage', [])
     }
   } else {
-    throw res.State
+    throw res.data.State
   }
 }
 

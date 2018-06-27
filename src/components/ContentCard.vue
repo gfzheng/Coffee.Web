@@ -8,6 +8,8 @@
     <p class="text-body" v-html="bodyText"></p>
     <p class="see-all" v-if="moreText&&!seeAll" @click="seeAll = true">查看全部</p>
     <p class="see-all" v-if="seeAll" @click="seeAll = false">收起全文</p>
+    <image-view v-if="contentData.Album.Images" :contentId="contentData.ID" :images="contentData.Album.Images"/>
+    <slot></slot>
     <div class="tag-box">
       <el-tag size="small" class="tag" v-for="(tag, index) in contentData.Tag" :key="index">{{tag}}</el-tag>
     </div>
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+import ImageView from './Home/Content/Image/ImageView'
 import Comments from './Comments/Comments'
 import { mapState } from 'vuex'
 export default {
@@ -39,7 +42,7 @@ export default {
     }
   },
   components: {
-    Comments
+    Comments,ImageView
   },
   data () {
     return {

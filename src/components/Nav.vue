@@ -35,6 +35,7 @@
           我的消息
           <el-badge class="message-dot" v-if="all > 0" :value="all" :max="99"></el-badge>
         </el-menu-item>
+        <el-menu-item index="Follow">关注列表</el-menu-item>
         <el-menu-item index="Setting">个人设置</el-menu-item>
         <el-menu-item index="Logout">退出登陆</el-menu-item>
       </el-submenu>
@@ -188,6 +189,8 @@ export default {
         this.$router.push({ name: "CommentBox" })
       } else if (key == 'Setting') {
         this.$router.push({ name: "Setting" })
+      } else if (key == 'Follow') {
+        this.$message("即将推出")
       }
     }
   }

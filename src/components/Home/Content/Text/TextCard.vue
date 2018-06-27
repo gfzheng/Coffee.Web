@@ -1,9 +1,9 @@
 <template>
   <div class="text-card">
-    <time-line :titleText="formatTime(contentData.PublishDate)"/>
+    <time-line :titleText="formatTime(contentData.PublishDate)" />
     <transition name="el-zoom-in-center" @after-leave="showEdit = true">
       <el-card class="text-content" shadow="hover" v-show="showCard">
-        <content-card :contentData="contentData" @showEdit="showCard = false" :showEdit="!$route.params.id"/>
+        <content-card :contentData="contentData" @showEdit="showCard = false" :showEdit="!$route.params.id" />
       </el-card>
     </transition>
     <transition name="el-zoom-in-center" @after-leave="showCard = true">
@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    formatTime(date) {
+    formatTime (date) {
       return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
     },
     doneEdit () {
@@ -45,9 +45,9 @@ export default {
 </script>
 
 <style lang="scss">
- .text-card{
-   .text-content{
-     margin-left: 30px;
-   }
- }
+.text-card {
+  .text-content {
+    margin-left: 30px;
+  }
+}
 </style>

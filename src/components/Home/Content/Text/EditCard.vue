@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-card">
+  <div class="text-edit-card">
     <el-card class="new-text-card" shadow="hover">
       <div class="card-title">
         <span>记录点滴</span>
@@ -74,7 +74,7 @@ export default {
             this.$message.error("非法请求")
           }
         } else {
-          let res = await this.$service.content.UpdateText.call(this, {
+          let res = await this.$service.content.Update.call(this, {
             id: this.rawData.ID,
             title: this.title,
             content: this.content,
@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style lang="scss">
-.edit-card {
+.text-edit-card {
   .new-text-card {
     margin-left: 28px;
     margin-bottom: 40px;

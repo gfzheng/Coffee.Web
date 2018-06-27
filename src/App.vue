@@ -20,12 +20,15 @@
       })
     },
     async mounted() {
-      console.log(this.logged,this.$route.name)
-      if (this.$route.name !== 'Login' && this.$route.name !== 'Square' && this.$route.name !== 'User') {
+      if (this.$route.name !== 'Login') {
         try{
           let res = await this.$service.user.GetInfo.call(this)
           if (res.State !== 'success') {
-            Logout.call(this)
+            if (this.$route.name !== 'Square' && this.$route.name !== 'User') {
+              throw "not_login"
+            } else {
+              this.$store.commit('logout')
+            }
           } else {
             this.$store.commit('setInfo', res)
           }

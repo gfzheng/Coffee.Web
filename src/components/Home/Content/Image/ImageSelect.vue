@@ -18,7 +18,7 @@
           <!--<p class="img-uploader-file-size">10MB</p>-->
           <p class="img-uploader-file-name" @click='openInput()'>{{fileNameList[index]}}</p>
         </div>
-        <img src="../assets/round_close.svg" class="img-uploader-delete-btn" @click="deleteImg(index)"/>
+        <img src="../../../../assets/round_close.svg" class="img-uploader-delete-btn" @click="deleteImg(index)"/>
       </div>
     </div>
 
@@ -139,7 +139,7 @@
           this.fileNameList.push(file.name)
         }
         if (files && files.length > 0) {
-          this.countText = `${files.length}张图片`
+          // this.countText = `${files.length}张图片`
         }
         // this.$emit('onChange', files)
         this.preview(files)
@@ -177,7 +177,10 @@
                 thumb: result
               })
               nowCount++
-              if (nowCount === allCount) this.$emit("Changing", false)
+              this.countText = `${nowCount}张图片.`
+              if (nowCount === allCount) {
+                this.$emit("Changing", false)
+              }
             })
           }
           reader.readAsDataURL(file)
@@ -192,7 +195,6 @@
     position: relative;
     display: inline-block;
     min-width: 260px;
-    max-width: 800px;
     height: calc(150px + 25px * 2);
     width: auto;
     border-radius: 5px;
@@ -212,8 +214,6 @@
     margin: 5px 10px;
     height: calc(150px + 18px * 2);
     /*width: 100%;*/
-    white-space: nowrap;
-    overflow: hidden;
     overflow-x: auto;
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
