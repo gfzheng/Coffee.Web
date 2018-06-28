@@ -62,16 +62,12 @@ export default {
   watch: {
     searchText (val) {
       delay(() => {
-        console.log(val)
-        console.log(val === '')
         if (val === '') {
           this.showContents = this.contents
         } else {
           this.showContents = []
           for (let i in this.contents) {
             let data = this.contents[i]
-            console.log(data.Name)
-            console.log(data.Name.indexOf(val, 0))
             if (data.Name.indexOf(val, 0) !== -1 ||
               data.Detail.indexOf(val, 0) !== -1) {
               this.showContents.push(data)
