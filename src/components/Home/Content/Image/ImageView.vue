@@ -4,7 +4,7 @@
       <li @click="showBigImage(index)" class="image-list" v-for="(image, index) in showImages">
         <img :src="'/api/thumb/'+ image.Thumb" />
       </li>
-      <li @click="showMore" class="image-list image-more" v-if="hideSome">
+      <li @click="showMore" class="image-list image-more" v-if="hideSome && this.images.length > 9">
         <canvas ref="canvasMore" :id="contentId" width="150" height="150"></canvas>
       </li>
     </ul>
