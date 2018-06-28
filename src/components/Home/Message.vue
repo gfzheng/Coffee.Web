@@ -51,7 +51,6 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
-      console.log(key, keyPath)
       switch (key) {
         case 'comments':
           this.$router.push({ name: 'CommentBox' })

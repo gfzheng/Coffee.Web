@@ -49,8 +49,11 @@
     text-align: center;
     color: #2c3e50;
     min-width: 500px;
+    height: 100%;
   }
-  body {
+  body, html {
+    background: rgb(245, 245, 245);
+    height: 100%;
     scroll-behavior: smooth;
   }
 </style>

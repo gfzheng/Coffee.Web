@@ -159,10 +159,8 @@ export default {
         type: 'warning'
       }).then(async () => {
         try {
-          console.log(id)
           let isReply = (id !== 0)
           if (!isReply) id = this.commentData.Comment.ID
-          console.log(id)
           let res = await this.$service.comment.Delete.call(this, id)
           if (res.State !== "success") {
             this.$notify.error({

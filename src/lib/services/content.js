@@ -55,7 +55,6 @@ async function GetPublic (page, eachPage) {
 }
 
 async function Delete (id) {
-  console.log(id)
   let res = await this.$https.delete('/content/' + id)
   return res.data
 }

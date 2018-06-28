@@ -2,7 +2,7 @@
   <div class="content-image">
     <el-row v-if="!$route.params.id" class="tool-bar" type="flex" justify="space-between">
       <el-col>
-        <el-input class="input-search" placeholder="请输入内容" v-model="searchText" clearable>
+        <el-input class="input-search" placeholder="请输入内容" v-model.trim="searchText" clearable>
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </el-col>
@@ -30,12 +30,19 @@
 import ImageCard from './ImageCard'
 import EditCard from './EditCard'
 import TimeLine from '@/components/TimeLine'
+const delay = (function () {
+  let timer = 0;
+  return function (callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
 export default {
   name: 'ContentText',
   computed: {
     showImage () {
-      if ((this.currentPage - 1) * this.pageSize > this.contents.length) this.currentPage--
-      return this.contents.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
+      if ((this.currentPage - 1) * this.pageSize > this.showContents.length) this.currentPage--
+      return this.showContents.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
     }
   },
   components: {
@@ -47,8 +54,42 @@ export default {
       pageSize: 7,
       searchText: '',
       newVisible: false,
+      showContents: [],
       contents: [],
       nowTime: new Date()
+    }
+  },
+  watch: {
+    searchText (val) {
+      delay(() => {
+        console.log(val)
+        console.log(val === '')
+        if (val === '') {
+          this.showContents = this.contents
+        } else {
+          this.showContents = []
+          for (let i in this.contents) {
+            let data = this.contents[i]
+            console.log(data.Name)
+            console.log(data.Name.indexOf(val, 0))
+            if (data.Name.indexOf(val, 0) !== -1 ||
+              data.Detail.indexOf(val, 0) !== -1) {
+              this.showContents.push(data)
+              break;
+            } else {
+              for (let j in this.contents[i].Tag) {
+                let isPushed = false
+                if (this.contents[i].Tag[j].indexOf(val, 0) !== -1) {
+                  this.showContents.push(data)
+                  isPushed = true
+                  break;
+                }
+                if (isPushed) break;
+              }
+            }
+          }
+        }
+      }, 300)
     }
   },
   methods: {
@@ -77,6 +118,8 @@ export default {
         if (res.Data !== null) {
           this.$nextTick(_ => {
             this.contents = res.Data
+            this.searchText = ''
+            this.showContents = this.contents
           })
 
         }
@@ -94,7 +137,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     // 获取信息
     this.getAlbumContent()
     this.getLike()

@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import ContentCard from '../ContentCard'
-import TopButton from '../TopButton'
+import ContentCard from '../components/ContentCard'
+import TopButton from '../components/TopButton'
 import { mapState } from 'vuex';
 export default {
   components: {

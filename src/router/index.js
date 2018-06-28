@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../components/Home/Home.vue'
+import Home from '../pages/Home.vue'
+import About from '../pages/About.vue'
 import Tab from '../components/Home/Tab.vue'
 import Message from '../components/Home/Message.vue'
 import Setting from '../components/Home/Setting.vue'
 import Login from '../pages/Login.vue'
 import NotLogin from '../pages/NotLogin.vue'
-import Square from '../components/Square/Square.vue'
+import Square from '../pages/Square.vue'
 import Detail from '../components/Home/Content/Detail'
 
 import User from '../components/Home/User.vue'
@@ -23,7 +24,6 @@ export default new Router({
   routes: [
     {
       path: '/home',
-      name: 'Home',
       component: Home,
       children: [{
         path: '',
@@ -77,6 +77,11 @@ export default new Router({
       path: '/user/:id',
       name: 'User',
       component: User
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About
     },
     {
       path: '',

@@ -8,6 +8,8 @@
         <p class="info-bio">
           {{bio}}
         </p>
+        <el-row type="flex">
+          <el-col>
         <div class="info-name">
           {{name}}
           <i v-if="gender === 0" class="fa fa-transgender i-other" aria-hidden="true"></i>
@@ -17,6 +19,8 @@
         <div class="info-email">
           {{email}}
         </div>
+        </el-col>
+        </el-row>
       </el-col>
     </el-row>
     <el-row class="home-body" :gutter="40" type="flex" justify="center">
@@ -59,7 +63,7 @@ export default {
 
 <style lang="scss">
 .home {
-  background-image: url("../../assets/wallhaven.jpg");
+  background-image: url("http://xmatrix-1252808268.cosgz.myqcloud.com/wallhaven.jpg");
   background-size: cover;
   background-attachment: fixed;
   .top-banner {

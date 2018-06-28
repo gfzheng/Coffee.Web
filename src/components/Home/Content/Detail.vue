@@ -18,6 +18,7 @@
     <el-row class="home-body" :gutter="40" type="flex" justify="center">
       <el-col class="content" :span="18">
         <div class="info-content" v-html="htmlText" />
+        <image-view v-if="detail.Album && detail.Album.Images" :contentId="detail.ID" :images="detail.Album.Images"/>
         <div class="control">
           <el-button @click="likeIt" :disabled="buttonLike" class="button-like" type="success" round :plain="!likeData.includes(detail.ID)">给你个赞 | {{detail.LikeNum}}</el-button>
         </div>
@@ -32,10 +33,11 @@
 
 <script>
 import comments from '@/components/Comments/Comments'
+import ImageView from '../Content/Image/ImageView'
 import {mapState} from 'vuex'
 export default {
   components: {
-    comments
+    comments, ImageView
   },
   computed: {
     ...mapState({
@@ -139,7 +141,7 @@ export default {
 
 <style lang="scss">
 .detail {
-  background-image: url("../../../assets/wallhaven.jpg");
+  background-image: url("http://xmatrix-1252808268.cosgz.myqcloud.com/wallhaven.jpg");
   background-size: cover;
   background-attachment: fixed;
   .top-banner {
@@ -198,10 +200,9 @@ export default {
         color: rgb(68, 68, 68);
         margin-top: 6px;
         font-size: 16px;
-        min-height: 300px;
-        margin-bottom: 100px;
       }
       .control {
+        margin-top: 100px;
         text-align: center;
       }
       .tag-box {

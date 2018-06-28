@@ -141,7 +141,7 @@ export default {
           formData.append("tags", this.dynamicTags)
           let res = await this.$service.content.AddAlbum.call(this, formData)
           if (res.State !== 'success') {
-            throw res.State
+            this.$message.error('发布失败，可能是你的空间不足了');
           } else {
             this.$refs.imageSelect.InitData()
             this.$message({
@@ -158,7 +158,6 @@ export default {
             tags: this.dynamicTags
           })
           if (res.State != 'success') {
-            console.log(res)
             this.$message.error("非法请求")
           } else {
             this.$message({

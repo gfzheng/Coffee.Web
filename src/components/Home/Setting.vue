@@ -11,6 +11,7 @@
         <p class="space-title">空间：{{textUsedSize}} / {{textMaxSize}}</p>
         <el-progress class="progress" :text-inside="true" :stroke-width="18" :percentage="spacePercentage" color="#8e71c7"></el-progress>
       </div>
+      <div class="setting-control"></div>
       <el-button @click="updateInfo">修改个人信息</el-button>
       <el-button @click="updateName">修改昵称</el-button>
     </el-card>
@@ -38,7 +39,7 @@ export default {
     },
     spacePercentage () {
       if (this.maxSize === 0) return 0
-      return parseFloat((this.usedSize / this.maxSize).toFixed(2))
+      return parseFloat((this.usedSize / this.maxSize).toFixed(2)) * 100
     },
     userClass () {
       let textClass = '普通用户'
@@ -75,7 +76,7 @@ export default {
       activeIndex: 'Home',
       notif: true,
       notifCount: 5,
-      textSize: ['KB', 'MB', 'GB', 'TB']
+      textSize: ['B', 'KB', 'MB', 'GB', 'TB']
     };
   },
   methods: {
@@ -132,5 +133,8 @@ export default {
 <style lang="scss">
 .setting {
   text-align: left;
+  .setting-control{
+    margin: 20px;
+  }
 }
 </style>

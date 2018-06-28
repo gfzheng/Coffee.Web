@@ -70,7 +70,6 @@ export default {
             tags: this.dynamicTags
           })
           if (res.State !== 'success') {
-            console.log(res)
             this.$message.error("非法请求")
           }
         } else {
@@ -82,7 +81,6 @@ export default {
             tags: this.dynamicTags
           })
           if (res.State != 'success') {
-            console.log(res)
             this.$message.error("非法请求")
           }
         }
@@ -124,7 +122,9 @@ export default {
       }).then(async () => {
         try {
           let res = await this.$service.content.Delete.call(this, this.rawData.ID)
-          console.log(res)
+          if (res.Data === 'success') {
+            this.$message("删除成功")
+          }
         } catch (error) {
           this.$service.errorHandle.call(this, error, msg => {
             this.$notify.error({

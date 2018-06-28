@@ -5,7 +5,7 @@
         <img :src="'/api/thumb/'+ image.Thumb" />
       </li>
       <li @click="showMore" class="image-list image-more" v-if="hideSome">
-        <canvas id="more" width="150" height="150"></canvas>
+        <canvas ref="canvasMore" :id="contentId" width="150" height="150"></canvas>
       </li>
     </ul>
     <el-button v-if="!hideSome && images.length > 9" type="text" @click="showLess">收起</el-button>
@@ -13,7 +13,7 @@
       <div slot="title">浏览大图
         <el-button class="button-download" size="mini" @click="downloadImage">下载</el-button>
       </div>
-      <img class="big-img" :src="bigSrc">
+      <img class="big-img" :src="bigSrc" alt="需要登陆后才能查看">
     </el-dialog>
   </div>
 </template>
@@ -34,8 +34,19 @@ export default {
       imageIndex: 0,
       showImage: false,
       bigSrc: '',
-      showImages: [],
-      hideSome: false
+      hideSome: true,
+      isShowMore: false
+    }
+  },
+  computed: {
+    showImages () {
+      if (this.hideSome && this.images.length > 9) {
+        //this.drawMore()
+      this.$nextTick(this.drawMore)
+        return this.images.slice(0, 8)
+      } else {
+        return this.images
+      }
     }
   },
   methods: {
@@ -45,12 +56,10 @@ export default {
 
     showMore () {
       this.hideSome = false
-      this.showImages = this.images
     },
 
-    showLess() {
+    showLess () {
       this.hideSome = true
-      this.showImages = this.images.slice(0, 8)
       this.$nextTick(this.drawMore)
     },
 
@@ -61,7 +70,10 @@ export default {
     },
 
     drawMore () {
-      let ctx = document.getElementById("more").getContext("2d")
+      console.log(this.contentId)
+      console.log(document.getElementById(this.contentId))
+      let ctx = document.getElementById(this.contentId).getContext("2d")
+      console.log(ctx)
       let width = 150
       let height = 150
       let radius = 5
@@ -95,13 +107,6 @@ export default {
     }
   },
   mounted () {
-    if (this.images.length > 9) {
-      this.showImages = this.images.slice(0, 8)
-      this.hideSome = true
-      this.$nextTick(this.drawMore)
-    } else {
-      this.showImages = this.images
-    }
   }
 }
 </script>

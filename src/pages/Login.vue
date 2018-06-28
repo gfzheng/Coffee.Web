@@ -20,12 +20,6 @@ export default {
         await this.$service.user.Login.call(this, query.code, query.state)
         this.GetMessage()
         this.$router.push({ name: 'Tab' })
-        // console.log(query.redirectUrl)
-        // if (query.redirectUrl && query.redirectUrl !== 'NotLogin') {
-        //   this.$router.push({ name: query.redirectUrl })
-        // } else {
-        //   this.$router.push({ name: 'Tab' })
-        // }
       } catch (error) {
         this.$service.errorHandle.call(this, error, message => {
           this.$notify.error({

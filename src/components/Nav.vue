@@ -13,6 +13,10 @@
         <i class="fa fa-comments fa-fw" aria-hidden="true"></i>
         广场
       </el-menu-item>
+      <el-menu-item index="About">
+        <i class="fa fa-info fa-fw" aria-hidden="true"></i>
+        关于
+      </el-menu-item>
       <el-menu-item class="menu-login" index="Login" v-if="!logged">
         <i class="fa fa-user fa-fw" aria-hidden="true"></i>
         登录
@@ -65,7 +69,7 @@ export default {
     },
     spacePercentage () {
       if (this.maxSize === 0) return 0
-      return parseFloat((this.usedSize / this.maxSize).toFixed(2))
+      return parseFloat((this.usedSize / this.maxSize).toFixed(2)) * 100
     },
     routeName () {
       return this.$route.name
@@ -105,11 +109,10 @@ export default {
       activeIndex: 'Home',
       notif: true,
       notifCount: 5,
-      textSize: ['KB', 'MB', 'GB', 'TB']
+      textSize: ['B', 'KB', 'MB', 'GB', 'TB']
     };
   },
   mounted () {
-    console.log(this.$route.path.toLowerCase())
     if (this.$route.path.toLowerCase() === '/' || this.$route.path.toLowerCase() === '') {
       this.activeIndex = 'Square'
     } else if (this.$route.path.toLowerCase() === '/home/') {
@@ -117,6 +120,8 @@ export default {
     } else if (this.$route.path.toLowerCase().substr(0, 7) === '/message') {
       this.activeIndex = 'Message'
     } else if (this.$route.path.toLowerCase() === '/setting') {
+      this.activeIndex = 'Setting'
+    } else if (this.$route.path.toLowerCase() === '/about') {
       this.activeIndex = 'Setting'
     } else {
       this.activeIndex = 'Nothing'
@@ -137,6 +142,9 @@ export default {
           break
         case 'Message':
           this.activeIndex = 'Message'
+          break
+        case 'About':
+          this.activeIndex = 'About'
           break
         default:
           this.activeIndex = 'Nothing'
@@ -172,7 +180,6 @@ export default {
       this.$service.user.Logout.call(this)
     },
     handleSelect (key, keyPath) {
-      console.log(key, keyPath)
       if (key == 'Login') {
         this.login()
       } else if (key == 'Logout') {
@@ -189,6 +196,8 @@ export default {
         this.$router.push({ name: "CommentBox" })
       } else if (key == 'Setting') {
         this.$router.push({ name: "Setting" })
+      } else if (key == 'About') {
+        this.$router.push({ name: "About" })
       } else if (key == 'Follow') {
         this.$message("即将推出")
       }

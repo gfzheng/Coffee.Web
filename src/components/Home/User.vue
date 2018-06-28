@@ -84,7 +84,7 @@ export default {
 
 <style lang="scss">
 .home {
-  background-image: url("../../assets/wallhaven.jpg");
+  background-image: url("http://xmatrix-1252808268.cosgz.myqcloud.com/wallhaven.jpg");
   background-size: cover;
   background-attachment: fixed;
   .top-banner {

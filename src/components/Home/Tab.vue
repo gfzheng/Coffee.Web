@@ -45,6 +45,20 @@
           Coming soon...
         </el-card>
       </el-tab-pane>
+      <el-tab-pane name="code">
+        <span slot="label">
+          <i class="fa fa-code fa-fw"></i> 代码</span>
+        <el-card class="tab-card" shadow="hover">
+          Coming soon...
+        </el-card>
+      </el-tab-pane>
+      <el-tab-pane name="other">
+        <span slot="label">
+          <i class="fa fa-coffee fa-fw"></i> 其他</span>
+        <el-card class="tab-card" shadow="hover">
+          Coming soon...
+        </el-card>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -67,7 +81,6 @@ export default {
   methods: {
 
     handleClick (tab, event) {
-      console.log(tab, event);
     },
 
   }
