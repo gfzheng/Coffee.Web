@@ -5,7 +5,7 @@
         <img class="avatar" :src="userData.Info.Avatar">
       </el-col>
       <el-col class="info-box" :span="15">
-        <el-button :class="[windowsScroll < 260 ? 'button-back': 'button-float']" type="primary" icon="el-icon-back" circle title="返回" @click="$router.back()"/>
+        <el-button :class="[windowsScroll < 260 ? 'button-back': 'button-float']" type="primary" icon="el-icon-back" circle title="返回" @click="$router.back()" />
         <p class="info-bio">
           {{userData.Info.Bio}}
         </p>
@@ -35,7 +35,7 @@ export default {
   components: {
     Tab
   },
-  data() {
+  data () {
     return {
       userData: {
         Info: {
@@ -62,7 +62,7 @@ export default {
     }
   },
   async mounted () {
-    window.addEventListener('scroll',(e) => {
+    window.addEventListener('scroll', (e) => {
       this.windowsScroll = window.scrollY
     })
     try {

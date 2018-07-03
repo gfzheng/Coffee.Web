@@ -5,15 +5,18 @@
       <el-button :disabled="getNew" v-if="windowsScroll < 300" class="button-reflesh" type="primary" icon="el-icon-refresh" circle @click="toReflesh"></el-button>
     </transition>
     <transition name="el-zoom-in-top">
-    <div class="newText" v-if="getNew"><i class="el-icon-loading loading-icon"></i>努力获取新内容 😊</div>
+      <div class="newText" v-if="getNew">
+        <i class="el-icon-loading loading-icon"></i>努力获取新内容 😊</div>
     </transition>
     <el-row type="flex" :gutter="20" justify="center">
       <el-col :span="16">
-        <el-card shadow="hover" class="public-card" v-for="(content, index) in contents" :key="index">
+        <el-card shadow="hover" class="public-card" v-for="(content, index) in contents" :key="contetn">
           <div class="info-name">
             <img class="user-avatar" :src="content.User.Avatar" />
             <div class="user-info">
-              <div class="user-name"><a @click="gotoUser(content.Data.OwnID)">{{content.User.Name}}</a></div>
+              <div class="user-name">
+                <a @click="gotoUser(content.Data.OwnID)">{{content.User.Name}}</a>
+              </div>
             </div>
           </div>
           <content-card class="content-body" :contentData="content.Data" :key="index" />
@@ -64,11 +67,11 @@ export default {
       }
     },
 
-    gotoUser(userId) {
+    gotoUser (userId) {
       this.$router.push({ name: 'User', params: { id: userId } })
     },
 
-    loadMore() {
+    loadMore () {
       this.page++
       this.GetPublic()
     },
@@ -101,7 +104,7 @@ export default {
   background: rgb(245, 245, 245);
   text-align: left;
   min-height: 800px;
-  .newText{
+  .newText {
     text-align: center;
     margin-bottom: 40px;
     .loading-icon {
@@ -114,13 +117,13 @@ export default {
     bottom: 40px;
     left: 40px;
   }
-  .load-more{
+  .load-more {
     user-select: none;
     cursor: pointer;
     text-align: center;
     margin-bottom: 50px;
   }
-  .nothing-more{
+  .nothing-more {
     user-select: none;
     text-align: center;
     margin-bottom: 50px;

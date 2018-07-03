@@ -18,7 +18,7 @@
     <el-row class="home-body" :gutter="40" type="flex" justify="center">
       <el-col class="content" :span="18">
         <div class="info-content" v-html="htmlText" />
-        <image-view v-if="detail.Album && detail.Album.Images" :contentId="detail.ID" :images="detail.Album.Images"/>
+        <image-view v-if="detail.Album && detail.Album.Images" :contentId="detail.ID" :images="detail.Album.Images" />
         <div class="control">
           <el-button @click="likeIt" :disabled="buttonLike" class="button-like" type="success" round :plain="!likeData.includes(detail.ID)">给你个赞 | {{detail.LikeNum}}</el-button>
         </div>
@@ -34,7 +34,7 @@
 <script>
 import comments from '@/components/Comments/Comments'
 import ImageView from '../Content/Image/ImageView'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {
     comments, ImageView
@@ -98,7 +98,7 @@ export default {
             throw res.State
           }
         }
-      } catch(error) {
+      } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
       this.buttonLike = false
@@ -130,7 +130,7 @@ export default {
   },
   mounted () {
     window.scrollTo(0, 0)
-    window.addEventListener('scroll',(e) => {
+    window.addEventListener('scroll', (e) => {
       this.windowsScroll = window.scrollY
     })
     this.getData()

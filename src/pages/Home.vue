@@ -10,16 +10,16 @@
         </p>
         <el-row type="flex">
           <el-col>
-        <div class="info-name">
-          {{name}}
-          <i v-if="gender === 0" class="fa fa-transgender i-other" aria-hidden="true"></i>
-          <i v-if="gender === 2" class="fa fa-venus i-pink" aria-hidden="true"></i>
-          <i v-if="gender === 1" class="fa fa-mars i-blue" aria-hidden="true"></i>
-        </div>
-        <div class="info-email">
-          {{email}}
-        </div>
-        </el-col>
+            <div class="info-name">
+              {{name}}
+              <i v-if="gender === 0" class="fa fa-transgender i-other" aria-hidden="true"></i>
+              <i v-if="gender === 2" class="fa fa-venus i-pink" aria-hidden="true"></i>
+              <i v-if="gender === 1" class="fa fa-mars i-blue" aria-hidden="true"></i>
+            </div>
+            <div class="info-email">
+              {{email}}
+            </div>
+          </el-col>
         </el-row>
       </el-col>
     </el-row>

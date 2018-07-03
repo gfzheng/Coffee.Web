@@ -136,7 +136,7 @@ export default {
       })
     },
 
-    formatTime(date) {
+    formatTime (date) {
       return this.$util.formatDate(new Date(date), 'yyyy.M.dd hh:mm')
     },
 

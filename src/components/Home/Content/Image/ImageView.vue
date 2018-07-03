@@ -42,7 +42,7 @@ export default {
     showImages () {
       if (this.hideSome && this.images.length > 9) {
         //this.drawMore()
-      this.$nextTick(this.drawMore)
+        this.$nextTick(this.drawMore)
         return this.images.slice(0, 8)
       } else {
         return this.images

@@ -17,7 +17,7 @@
         <edit-card @submit="getAlbumContent"></edit-card>
       </div>
     </transition>
-    <image-card @FlushTextList="getAlbumContent" v-for="(content, index) in showImage" :contentData="content" :key="index"></image-card>
+    <image-card @FlushTextList="getAlbumContent" v-for="(content, index) in showImage" :contentData="content" :key="content.Thumb"></image-card>
     <el-pagination class="pagination" v-show="contents.length > pageSize" :current-page="currentPage" background layout="prev, pager, next" :page-size="pageSize" :total="contents.length" @current-change="changePage" />
     <p class="bottom-under line-time">
       <i class="fa fa-circle time-point" aria-hidden="true"></i>

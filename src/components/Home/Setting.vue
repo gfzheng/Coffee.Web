@@ -133,7 +133,7 @@ export default {
 <style lang="scss">
 .setting {
   text-align: left;
-  .setting-control{
+  .setting-control {
     margin: 20px;
   }
 }

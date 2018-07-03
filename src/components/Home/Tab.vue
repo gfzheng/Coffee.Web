@@ -11,7 +11,7 @@
       <el-tab-pane name="image">
         <span slot="label">
           <i class="fa fa-picture-o fa-fw"></i> 相册</span>
-          <tab-image/>
+        <tab-image/>
         </el-pagination>
       </el-tab-pane>
       <el-tab-pane name="movie">

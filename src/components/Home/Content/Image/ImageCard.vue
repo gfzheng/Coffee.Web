@@ -3,7 +3,7 @@
     <time-line :titleText="formatTime(contentData.PublishDate)" />
     <transition name="el-zoom-in-center" @after-leave="showEdit = true">
       <el-card class="text-content" shadow="hover" v-show="showCard">
-        <content-card :contentData="contentData" @showEdit="showCard = false" :showEdit="!$route.params.id"/>
+        <content-card :contentData="contentData" @showEdit="showCard = false" :showEdit="!$route.params.id" />
       </el-card>
     </transition>
     <transition name="el-zoom-in-center" @after-leave="showCard = true">
