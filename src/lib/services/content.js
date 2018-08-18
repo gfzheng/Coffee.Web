@@ -1,7 +1,7 @@
 async function AddText (data) {
   let res = await this.$https.post('/content/text', {
     title: data.title,
-    content: data.content,
+    detail: data.detail,
     tags: data.tags,
     isPublic: data.isPublic
   })
@@ -9,7 +9,12 @@ async function AddText (data) {
 }
 
 async function AddAlbum (data) {
-  let res = await this.$https.post('/content/album', data, {
+  let res = await this.$https.post('/content/album', {
+    title: data.title,
+    detail: data.detail,
+    tags: data.tags,
+    isPublic: data.isPublic
+  }, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }

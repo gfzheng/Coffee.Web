@@ -65,7 +65,7 @@ export default {
         if (!this.isEdit) { // 发布模式
           let res = await this.$service.content.AddText.call(this, {
             title: this.title,
-            content: this.content,
+            detail: this.content,
             isPublic: this.isPublic,
             tags: this.dynamicTags
           })
