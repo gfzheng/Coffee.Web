@@ -10,17 +10,7 @@
     </transition>
     <el-row type="flex" :gutter="20" justify="center">
       <el-col :span="16">
-        <el-card shadow="hover" class="public-card" v-for="(content, index) in contents" :key="contetn">
-          <div class="info-name">
-            <img class="user-avatar" :src="content.User.Avatar" />
-            <div class="user-info">
-              <div class="user-name">
-                <a @click="gotoUser(content.Data.OwnID)">{{content.User.Name}}</a>
-              </div>
-            </div>
-          </div>
-          <content-card class="content-body" :contentData="content.Data" :key="index" />
-        </el-card>
+        <square-card :contentData="content" v-for="content in contents" :key="content.Data.ID"/>
         <div v-if="!noMore" class="load-more" @click="loadMore">
           <el-card shadow="hover">点击加载更多</el-card>
         </div>
@@ -33,12 +23,12 @@
 </template>
 
 <script>
-import ContentCard from '../components/ContentCard'
+import SquareCard from '../components/SquareCard'
 import TopButton from '../components/TopButton'
 import { mapState } from 'vuex';
 export default {
   components: {
-    ContentCard, TopButton
+    SquareCard, TopButton
   },
   computed: {
     ...mapState({
@@ -65,10 +55,6 @@ export default {
       } catch (error) {
         this.$service.errorHandle.call(this, error)
       }
-    },
-
-    gotoUser (userId) {
-      this.$router.push({ name: 'User', params: { id: userId } })
     },
 
     loadMore () {
@@ -128,34 +114,7 @@ export default {
     text-align: center;
     margin-bottom: 50px;
   }
-  .public-card {
-    margin-bottom: 30px;
-    .info-name {
-      cursor: pointer;
-      margin-bottom: 10px;
-      .user-avatar {
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-        vertical-align: middle;
-        margin-right: 10px;
-      }
-      .user-info {
-        display: inline-block;
-        vertical-align: middle;
-        .user-name {
-          font-size: 16px;
-        }
-        .user-time {
-          font-size: 14px;
-          color: grey;
-        }
-      }
-    }
-    .content-body {
-      margin: 14px;
-    }
-  }
+
   .right-fixed {
     min-width: 200px;
     position: fixed;
