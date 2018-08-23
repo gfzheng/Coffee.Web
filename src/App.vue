@@ -20,6 +20,8 @@ export default {
     })
   },
   async mounted () {
+    // test
+    if (this.$route.name === 'Test') return
     if (this.$route.name !== 'Login') {
       try {
         let res = await this.$service.user.GetInfo.call(this)

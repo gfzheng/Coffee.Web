@@ -17,6 +17,8 @@ import LikeBox from '../components/Home/Message/LikeBox.vue'
 import MessageBox from '../components/Home/Message/MessageBox.vue'
 import SystemBox from '../components/Home/Message/SystemBox.vue'
 
+import UploadTest from '../components/Upload.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -82,6 +84,11 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: UploadTest
     },
     {
       path: '',

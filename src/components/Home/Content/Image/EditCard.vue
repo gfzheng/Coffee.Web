@@ -14,6 +14,7 @@
         <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" />
         <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加标签</el-button>
       </div>
+      <file-upload/>
       <div v-if="!isEdit" class="tab-image">
         <image-uploader ref="imageSelect" @onChange='imgChange' @Changing="changing" :maxSize="1024000" placeholder="选择或拖放图片"></image-uploader>
       </div>
@@ -31,9 +32,10 @@
 
 <script>
 import ImageUploader from './ImageSelect.vue'
+import FileUpload from '../../../Upload'
 export default {
   components: {
-    ImageUploader
+    ImageUploader, FileUpload
   },
   computed: {
     publicText () {
@@ -214,6 +216,34 @@ export default {
 
 <style lang="scss">
 .image-edit-card {
+
+  .file-uploads {
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  display: inline-block;
+}
+.file-uploads.file-uploads-html4 input[type="file"] {
+  opacity: 0;
+  font-size: 20em;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.file-uploads.file-uploads-html5 input[type="file"] {
+  overflow: hidden;
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  z-index: -1;
+  opacity: 0;
+}
+
   .new-image-card {
     margin-left: 28px;
     margin-bottom: 40px;
