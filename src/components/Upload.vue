@@ -264,7 +264,8 @@ export default {
         spark.appendBinary(e.target.result)
         sparkAll.appendBinary(e.target.result)
         currentChunk++
-        fileChunks.push({ file: e, md5: spark.end() })
+        let md5 = spark.end()
+        fileChunks.push({ file: this.originFile, md5: md5 })
         //如果文件处理完成计算MD5，如果还有分片继续处理
         if (currentChunk < chunks) {
           loadNext()
@@ -274,10 +275,11 @@ export default {
       }
       //处理单片文件的上传
       function loadNext () {
-        var start = currentChunk * chunkSize,
-          end = start + chunkSize >= file.size ? file.size : start + chunkSize
-
-        fileReader.readAsBinaryString(file.slice(start, end))
+        let start = currentChunk * chunkSize,
+          end = start + chunkSize >= file.size ? file.size : start + chunkSize,
+          originFile = file.slice(start, end)
+        fileReader.readAsBinaryString(originFile)
+        fileReader.originFile = originFile
       }
 
       loadNext()
@@ -287,7 +289,37 @@ export default {
       this.divFile(this.tableStatus[0].file, (md5, fileChunks) => {
         console.log(md5)
         console.log(fileChunks)
+        this.upload(fileChunks[0].file, md5, 0)
       })
+    },
+
+
+    upload (file, md5, index) {
+      var formData = new FormData();
+      formData.append("file", file);
+      formData.append("token", md5);
+      formData.append("index", index);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/file/upload');
+      // 上传完成后的回调函数
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('上传成功');
+        } else {
+          console.log('上传出错');
+        }
+      };
+      // 获取上传进度
+      xhr.upload.onprogress = function (event) {
+        if (event.lengthComputable) {
+          var percent = Math.floor(event.loaded / event.total * 100);
+          // 设置进度显示
+          console.log(percent)
+          //$("#J_upload_progress").progress('set progress', percent);
+        }
+      };
+      xhr.send(formData);
     },
 
     setProgress (i) {
