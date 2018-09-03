@@ -7,7 +7,7 @@
     <div class="upload-btns">
       <input v-show="false" id="input-file" type="file" :multiple="true" @change="onChangeInput" />
       <el-button @click="selectFile" size="small">选择文件</el-button>
-      <el-button size="small" type="success">开始上传</el-button>
+      <el-button size="small" type="success" @click="uploadFiles">开始上传</el-button>
     </div>
     <div class="upload-list">
       <el-table class="file-table" :data="tableStatus" empty-text="拖动或选择要上传的文件">
@@ -157,54 +157,80 @@ export default {
       this.addFiles(dataTransfer.files)
     },
 
-    checkMD5 (file) {
-      this.getFileMD5(file, md5 => {
-        if (this.tableStatus.length > 0) {
-          for (let f of this.tableStatus) {
-            if (f.md5 === md5) {
-              this.$message({
-                showClose: true,
-                message: '文件已存在',
-                type: 'warning'
-              })
-              return
-            } else if (f.md5 === this.tableStatus[this.tableStatus.length - 1].md5) {
-              this.loadThumb(file, md5)
-            }
+    checkDup (file) {
+      if (this.tableStatus.length > 0) {
+        for (let i in this.tableStatus) {
+          if (this.tableStatus[i].name === file.name) {
+            this.$message({
+              showClose: true,
+              message: '文件已存在',
+              type: 'warning'
+            })
+            return
+          } else if ((Number(i) + 1) === this.tableStatus.length) {
+            this.addToList(file)
           }
-        } else {
-          this.loadThumb(file, md5)
         }
-      })
+      } else {
+        this.addToList(file)
+      }
     },
 
-
-    loadThumb (file, md5) {
-      let reader = new FileReader()
-      reader.onload = e => {
-        resizeImage(e.target.result, 50, 50, result => {
-          // _this.imageDataList.push(result)
-          this.tableStatus.push({
-            name: file.name,
-            thumb: result,
-            size: file.size,
-            speed: 0,
-            status: '等待上传',
-            md5: md5
+    addToList (file) {
+      console.log(file)
+      if (file.type.substr(0, 5) === 'image') {
+        let reader = new FileReader()
+        reader.onload = e => {
+          resizeImage(e.target.result, 50, 50, result => {
+            this.tableStatus.push({
+              name: file.name,
+              thumb: result,
+              size: file.size,
+              speed: 0,
+              status: '等待上传',
+              file: file
+            })
           })
-          this.$message({
-            showClose: true,
-            message: '添加成功',
-            type: 'success'
-          })
+        }
+        reader.readAsDataURL(file)
+      } else {
+        this.tableStatus.push({
+          name: file.name,
+          thumb: this.getIcon(file.type, file.name),
+          size: file.size,
+          speed: 0,
+          status: '等待上传',
+          file: file
         })
       }
-      reader.readAsDataURL(file)
     },
 
     addFiles (files) {
       for (let file of files) {
-        this.checkMD5(file)
+        this.checkDup(file)
+      }
+    },
+
+    getIcon (type, name) {
+      let last2 = name.substr(name.length - 2, 2)
+      let last3 = name.substr(name.length - 3, 3)
+      let last4 = name.substr(name.length - 4, 4)
+      if (type.substr(0, 5) === 'video') {
+        return '/static/icon/file_type_video.svg'
+      } else if (last3 === 'zip' || last3 === 'rar' || 'last2' === '7z') {
+        return '/static/icon/file_type_zip.svg'
+      } else if (last3 === 'doc' || last4 === 'docx') {
+        return '/static/icon/file_type_word.svg'
+      } else if (last3 === 'xls' || last4 === 'xlsx') {
+        return '/static/icon/file_type_excel.svg'
+      } else if (last3 === 'ppt' || last4 === 'pptx') {
+        return '/static/icon/file_type_powerpoint.svg'
+      } else if (last3 === 'txt') {
+        return '/static/icon/file_type_text.svg'
+      } else if (last2 === 'md') {
+        return '/static/icon/file_type_markdown.svg'
+      } else {
+        return '/static/icon/default_file.svg'
       }
     },
 
@@ -222,26 +248,28 @@ export default {
       this.tableStatus.splice(i, 1)
     },
 
-    getFileMD5 (file, callback) {
+    divFile (file, callback) {
       //声明必要的变量
       let fileReader = new FileReader(),
         //文件每块分割2M，计算分割详情
         chunkSize = 2097152,
         chunks = Math.ceil(file.size / chunkSize),
         currentChunk = 0,
-        //创建md5对象（基于SparkMD5）
-        spark = new SparkMD5()
+        sparkAll = new SparkMD5(),
+        fileChunks = []
       //每块文件读取完毕之后的处理
       fileReader.onload = function (e) {
         //每块交由sparkMD5进行计算
+        let spark = new SparkMD5()
         spark.appendBinary(e.target.result)
+        sparkAll.appendBinary(e.target.result)
         currentChunk++
-
+        fileChunks.push({ file: e, md5: spark.end() })
         //如果文件处理完成计算MD5，如果还有分片继续处理
         if (currentChunk < chunks) {
           loadNext()
         } else {
-          callback(spark.end())
+          callback(sparkAll.end(), fileChunks)
         }
       }
       //处理单片文件的上传
@@ -255,10 +283,17 @@ export default {
       loadNext()
     },
 
+    uploadFiles () {
+      this.divFile(this.tableStatus[0].file, (md5, fileChunks) => {
+        console.log(md5)
+        console.log(fileChunks)
+      })
+    },
 
     setProgress (i) {
       document.getElementsByClassName("el-table__row")[0].style.backgroundImage = "linear-gradient(to right,#A5DEE4 " + i + "%,white " + i + "%)"
     },
+
     timeout () {
       if (this.num >= 100) return
       this.setProgress(this.num)
@@ -267,7 +302,6 @@ export default {
     },
 
     editName (i) {
-      console.log(i)
       this.$prompt('请输入文件名', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
