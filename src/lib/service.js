@@ -2,6 +2,7 @@ const userService = require('./services/user')
 const contentService = require('./services/content')
 const commentService = require('./services/comment')
 const likeService = require('./services/like')
+const fileService = require('./services/file')
 const notificationService = require('./services/notification')
 
 const service = {
@@ -12,6 +13,7 @@ const service = {
       comment: commentService.default,
       like: likeService.default,
       notification: notificationService.default,
+      file: fileService.default,
       errorHandle: this.errorHandle
     }
   },

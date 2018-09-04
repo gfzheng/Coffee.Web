@@ -112,6 +112,8 @@ export default {
       files: [],
       dropActive: false,
       num: 0,
+      uploadList: [],
+      uploading: 0,
     }
   },
   mounted () {
@@ -229,6 +231,8 @@ export default {
         return '/static/icon/file_type_text.svg'
       } else if (last2 === 'md') {
         return '/static/icon/file_type_markdown.svg'
+      } else if (last3 === 'pdf') {
+        return '/static/icon/file_type_pdf.svg'
       } else {
         return '/static/icon/default_file.svg'
       }
@@ -266,14 +270,12 @@ export default {
         currentChunk++
         let md5 = spark.end()
         fileChunks.push({ file: this.originFile, md5: md5 })
-        //如果文件处理完成计算MD5，如果还有分片继续处理
         if (currentChunk < chunks) {
           loadNext()
         } else {
-          callback(sparkAll.end(), fileChunks)
+          callback({ token: sparkAll.end(), fileChunks: fileChunks })
         }
       }
-      //处理单片文件的上传
       function loadNext () {
         let start = currentChunk * chunkSize,
           end = start + chunkSize >= file.size ? file.size : start + chunkSize,
@@ -281,41 +283,122 @@ export default {
         fileReader.readAsBinaryString(originFile)
         fileReader.originFile = originFile
       }
-
       loadNext()
     },
 
-    uploadFiles () {
-      this.divFile(this.tableStatus[0].file, (md5, fileChunks) => {
-        console.log(md5)
-        console.log(fileChunks)
-        this.upload(fileChunks[0].file, md5, 0)
+    // 开始上传文件
+    async uploadFiles () {
+      // 分割文件
+      let fileList = this.tableStatus
+      if (this.uploading >= fileList.length) {
+        console.log('所有上传完成')
+        // 所有上传完成
+        return
+      }
+      this.divFile(fileList[this.uploading].file, async data => {
+        console.log(data.token, data.fileChunks)
+        let chunks = []
+        for (let j in data.fileChunks) {
+          chunks.push({
+            index: Number(j),
+            size: data.fileChunks[j].file.size,
+            md5: data.fileChunks[j].md5,
+            status: false
+          })
+        }
+        try {
+          const res = await this.$service.file.Add.call(this, {
+            name: fileList[this.uploading].name,
+            size: fileList[this.uploading].size,
+            md5: data.token,
+            chunks: chunks
+          })
+          if (res.State === 'had_exist') {
+            // 秒传
+            console.log('ok')
+            this.uploading++
+            this.uploadFiles()
+          } else if (res.State === 'success') {
+            // 可以上传
+            this.uploadList = data.fileChunks
+            for (let j in this.uploadList) {
+              this.uploadList[j].upload = false
+              this.uploadList[j].done = false
+            }
+            // 三并行上传
+            for (let j = 0; j < 3; j++) {
+              if (this.uploadList.length > j) {
+                this.uploadList[j].upload = true
+                this.upload(this.uploadList[j].file, data.token, j)
+              }
+            }
+          } else {
+            throw res.State
+          }
+        } catch (error) {
+          this.$service.errorHandle.call(this, error, message => {
+            this.$notify.error({
+              title: message
+            })
+          })
+        }
       })
+
     },
 
-
-    upload (file, md5, index) {
+    upload (file, token, index) {
       var formData = new FormData();
       formData.append("file", file);
-      formData.append("token", md5);
+      formData.append("token", token);
       formData.append("index", index);
 
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/file/upload');
       // 上传完成后的回调函数
-      xhr.onload = function () {
+      xhr.onload =  async () => {
         if (xhr.status === 200) {
-          console.log('上传成功');
+          console.log('上传成功', index);
+          this.uploadList[index].done = true;
+          let count = 0;
+          for (let i in this.uploadList) {
+            if (this.uploadList[i].upload === false) {
+              this.uploadList[i].upload = true
+              this.upload(this.uploadList[i].file, token, i)
+              return
+            } else if (this.uploadList[i].done === true) {
+              count++
+            }
+          }
+          if (count === this.uploadList.length) {
+            try {
+              const res = await this.$service.file.Merge.call(this, token)
+                if (res.State === 'success') {
+                // 可以上传
+                console.log('合并成功')
+              } else {
+                throw res.State
+              }
+            } catch (error) {
+              this.$service.errorHandle.call(this, error, message => {
+                this.$notify.error({
+                  title: message
+                })
+              })
+            }
+            this.uploading++
+            this.uploadFiles()
+          }
         } else {
-          console.log('上传出错');
+          console.log('上传出错', index);
+          this.uploadList[index].upload = false
         }
       };
       // 获取上传进度
-      xhr.upload.onprogress = function (event) {
+      xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           var percent = Math.floor(event.loaded / event.total * 100);
           // 设置进度显示
-          console.log(percent)
+          console.log(index, percent)
           //$("#J_upload_progress").progress('set progress', percent);
         }
       };
