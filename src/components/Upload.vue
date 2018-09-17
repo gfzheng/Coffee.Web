@@ -117,40 +117,39 @@ export default {
     }
   },
   mounted () {
-    document.addEventListener('dragenter', this.onDragenter, false)
-    document.addEventListener('dragleave', this.onDragleave, false)
-    document.addEventListener('drop', this.onDocumentDrop, false)
-
-    document.addEventListener('dragover', this.onDragover, false)
-    document.addEventListener('drop', this.onDrop, false)
+    this.bindDrop()
   },
   methods: {
     // 拖动管理
-    onDragenter (e) {
-      e.preventDefault()
-      if (!this.dropActive) {
-        this.dropActive = true
-      }
-    },
-    onDragleave (e) {
-      e.preventDefault()
-      if (e.target.nodeName === 'HTML' || e.target === e.explicitOriginalTarget || (e.screenX === 0 && e.screenY === 0 && !e.fromElement && e.offsetX <= 0)) {
+    bindDrop () {
+      document.addEventListener('dragenter', (e) => {
+        e.preventDefault()
+        if (!this.dropActive) {
+          this.dropActive = true
+        }
+      }, false)
+      document.addEventListener('dragleave', (e) => {
+        e.preventDefault()
+        if (e.target.nodeName === 'HTML' || e.target === e.explicitOriginalTarget || (e.screenX === 0 && e.screenY === 0 && !e.fromElement && e.offsetX <= 0)) {
+          this.dropActive = false
+        }
+      }, false)
+      document.addEventListener('drop', () => {
         this.dropActive = false
-      }
+      }, false)
+      document.addEventListener('dragover', (e) => {
+        e.preventDefault()
+      }, false)
+      document.addEventListener('drop', (e) => {
+        e.preventDefault()
+        this.addDataTransfer(e.dataTransfer)
+      }, false)
     },
-    onDragover (e) {
-      e.preventDefault()
-    },
-    onDocumentDrop () {
-      this.dropActive = false
-    },
-    onDrop (e) {
-      e.preventDefault()
-      this.addDataTransfer(e.dataTransfer)
-    },
+
     selectFile () {
       document.getElementById("input-file").click()
     },
+
     onChangeInput (e) {
       this.addFiles(e.target.files)
     },
@@ -355,7 +354,7 @@ export default {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/file/upload');
       // 上传完成后的回调函数
-      xhr.onload =  async () => {
+      xhr.onload = async () => {
         if (xhr.status === 200) {
           console.log('上传成功', index);
           this.uploadList[index].done = true;
@@ -372,7 +371,7 @@ export default {
           if (count === this.uploadList.length) {
             try {
               const res = await this.$service.file.Merge.call(this, token)
-                if (res.State === 'success') {
+              if (res.State === 'success') {
                 // 可以上传
                 console.log('合并成功')
               } else {
