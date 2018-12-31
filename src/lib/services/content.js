@@ -37,7 +37,7 @@ async function GetAlbum (id) {
 async function Update (data) {
   let res = await this.$https.patch('/content/all/' + data.id, {
     title: data.title,
-    content: data.content,
+    detail: data.content,
     tags: data.tags,
     isPublic: data.isPublic
   })
